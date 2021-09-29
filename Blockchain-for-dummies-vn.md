@@ -1,6 +1,6 @@
 # Blockchain & Bitcoin cho phó thường dân
 
-![Bitcoin](assets\bitcoin-2007769_640.jpg)
+![Bitcoin](assets/bitcoin-2007769_640.jpg)
 
 *[Image by MichaelWuensch from Pixabay](<https://pixabay.com/users/michaelwuensch-4163668/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=2007769")*
 
