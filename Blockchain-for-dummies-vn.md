@@ -1,7 +1,3 @@
-# Blockchain for Dummies
-
-*Vietnamese version below*
-
 # Blockchain cho phó thường dân
 
 Einstein từng nói: *"Nếu anh không thể giải thích vấn đề một cách đơn giản, nghĩa là anh chưa thực sự hiểu nó"*.
