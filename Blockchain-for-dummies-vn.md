@@ -140,14 +140,58 @@ Vậy nếu Chris muốn chuyển 50 BTC cho Leon và 40 BTC cho Jill, thì anh 
 
 *Trong Bitcoin blockchain, mọi giao dịch đều được định danh bởi một chuỗi mã số, gọi là mã số định danh giao dịch (Transaction's Identification - TxID). Ta sẽ nói một cách ngắn gọn là mã giao dịch. Khi một giao dịch được chấp nhận vào ghi vào blockchain, thì cả dữ liệu của giao dịch lẫn mã giao dịch của nó đều được lưu giữ.*
 
-Và đây là cách mà Chris làm để thuyết phục mọi người rằng anh ta có đủ tiền để thực hiện 2 giao dịch mong muốn. Anh ta cung cấp cho mọi người một danh sách các mã số giao dịch trước đó (đã được ghi trên blockchain), trong đó Chris là người được nhận tiền. Ví dụ, Chris bảo: *"Này mọi người, trước đây Ada và Artyom đã chuyển cho tôi một số tiền, mã giao dịch của chúng là TxID1 và TxID2, và bây giờ, tôi sẽ chuyển cho Leon 50 BTC, và chuyển cho Jill 40 BTC"*. Những giao dịch mà Chris liệt kê trong đó anh ta là người nhận tiền, được gọi là các giao dịch đầu vào (*input transaction*s), ở đây là *TxID1* và *TxID2*. Mọi người sẽ rà soát trên blockchain để tìm kiếm 2 giao dịch có mã số *TxID1* và *TxID2*, sau đó kiểm tra nội dung các giao dịch này, mục đích là để kiểm tra các thông tin sau đây:
+Và đây là cách mà Chris làm để thuyết phục mọi người rằng anh ta có đủ tiền để thực hiện 2 giao dịch mong muốn. Anh ta cung cấp cho mọi người một danh sách các mã số giao dịch trước đó (đã được ghi trên blockchain), trong đó Chris là người được nhận tiền. Ví dụ, Chris bảo: *"Này mọi người, trước đây Ada và Artyom đã chuyển cho tôi một số tiền, mã giao dịch của chúng là TxID1 và TxID2, và bây giờ, tôi sẽ chuyển cho Leon 50 BTC, và chuyển cho Jill 40 BTC"*. Những giao dịch mà Chris liệt kê trong đó anh ta là người nhận tiền, được gọi là các giao dịch đầu vào (*input transaction*s), ở đây là *TxID1* và *TxID2*. Mọi người sẽ rà soát trên blockchain để tìm kiếm 2 giao dịch có mã số *TxID1* và *TxID2*, sau đó kiểm tra nội dung các giao dịch này, mục đích là để trả lời các câu hỏi sau:
 
-1. Các giao dịch trên có phải là chuyển tiền cho Chris hay không.
-2. Số tiền của mỗi giao dịch là bao nhiêu.
-3. Tổng số tiền Chris nhận được từ các giao dịch đầu vào trên có đủ để anh ta thực hiện các giao dịch chuyển tiền đi hay không?
+1. Các giao dịch đầu vào này có tồn tại trên blockchain không?
+2. Các giao dịch trên có đúng là chuyển tiền cho Chris không?
+3. Số tiền của mỗi giao dịch trên là bao nhiêu?
+4. Tổng số tiền Chris nhận được từ các giao dịch trên có đủ để anh ta thực hiện các giao dịch chuyển tiền đi hay không?
 
-Nếu các thông tin trên là đúng, thì giao dịch của Chris sẽ được chấp nhận (verified) và sẽ được ghi vào blockchain.
+Nếu tất cả các câu trả lời là đúng, thì giao dịch của Chris sẽ được *chấp nhận* (verified) và sẽ được ghi vào blockchain.
 
 Ở đây ta thấy rằng để kiểm tra một giao dịch mới, mọi người phải rà soát toàn bộ các transactions trong cả blockchain. Tại thời điểm viết bài này, tổng số giao dịch của Bitcoin đã lên tới gần 680 triệu, và trung bình có tới hơn 260 nghìn giao dịch mới mỗi ngày. Như vậy, việc xác minh giao dịch hẳn nhiên phải trở nên rất chậm chạp và hạn chế khả năng mở rộng của Bitcoin. 
 
 Phải có cách nào đó tốt hơn để khắc phục vấn đề này. Giải pháp đó sẽ được trình bày ở phần tiếp theo.
+
+## Phần 11: UTXO
+
+Ở cuối Phần 10, ta đã đặt ra vấn đề làm thế nào để giảm tải cho việc xác minh các giao dịch, khi mỗi người đều phải rà soát gần như toàn bộ các giao dịch đã có trên blockchain để xác minh một giao dịch mới.
+
+Trở lại với ví dụ của chúng ta. Mọi người đều đã xác nhận giao dịch của Chris là OK và giao dịch này sẽ được ghi vào blockchain. Ta đã biết rằng giao dịch này liệt kê 2 giao dịch đầu vào là TxID1 và TxID2, và ta đặt cho giao dịch mới được ghi nhận của Chris là TxID3. Tại thời điểm này, rõ ràng là vai trò cung cấp dòng tiền vào của TxID1 và TxID2 đã hết, vì toàn bộ số BTC của 2 giao dịch này đã đi vào giao dịch TxID3 do Chris mới tạo ra. Với Bitcoin, chúng được coi là những *"giao dịch đã được sử dụng"* (*spent transaction*). Theo nguyên tắc của Bitcoin, một giao dịch chỉ có thể được sử dụng một lần duy nhất. Trong trường hợp khi TxID3 của Chris được chấp thuận, thì TxID1 và TxID2 đều đã được sử dụng, và không giao dịch nào khác được sử dụng chúng làm giao dịch đầu vào nữa. Và vì thế, không ai còn quan tâm đến 2 giao dịch này nữa. Tất cả sẽ bỏ qua 2 giao dịch có mã số TxID1 và TxID2 trong khi rà soát trên blockchain. Bằng cách đó, Bitcoin giảm đáng kể số lượng giao dịch cần rà soát khi xác minh một giao dịch mới.
+
+Nhưng việc cải tiến chưa dừng lại ở đó!
+
+Ở trên, ta biết rằng TxID1 và TxID2 đã được sử dụng, và chẳng ai cần đến chúng nữa trong quá trình xác minh giao dịch đầu vào. Tiếp tục với ví dụ của chúng ta: TxID3 là mã giao dịch của Chris, trong đó TxID1 và TxID2 là 2 giao dịch đầu vào, cung cấp dòng tiền vào cho Chris để anh ta yêu cầu 2 giao dịch mới để chuyển tiền cho Leon và Jill. Hãy gọi 2 giao dịch con này là TxID4 và TxID5. Tại thời điểm TxID3 được ghi nhận vào blockchain, TxID4 chứa 50 BTC, còn TxID5 chứa 40 BTC. Số tiền này đều chưa được ai sử dụng. Chúng được gọi là *"số tiền đầu ra chưa được sử dụng"* (Unspent Transaction Ouput - UTXO). Thuật ngữ này rất khó dịch cho thoát, nên từ giờ ta sẽ gọi chúng là UTXO. Chỉ các UTXO mới được sử dụng để làm đầu vào cho các giao dịch. Điều này rất dễ hiểu: anh chỉ có thể sử dụng số tiền anh chưa sử dụng mà thôi.
+
+UTXO có vai trò vô cùng quan trọng trong thiết kế của Bitcoin. Mỗi node trong mạng lưới Bitcoin đều có một bảng theo dõi các UTXO này (được gọi là tập hợp UTXO, *UTXO set*) và cập nhật nó sau mỗi giao dịch. Thay vì phải rà soát trên blockchain để xác minh các giao dịch, các node chỉ cần rà soát trên UTXO set, sẽ nhanh hơn rất nhiều. Một phần vì kích thước dữ liệu của UTXO nhỏ hơn và đơn giản hơn block, một phần vì số lượng các UTXO có thể giảm đi sau một giao dịch. Đó là trường hợp số UTXO được sử dụng để cung cấp dòng tiền vào của một giao dịch lớn hơn số UTXO phát sinh sau giao dịch. Giả sử trong TxID3, Chris chỉ chuyển tiền cho Leon, mà không chuyển cho Jill, như thế sau khi giao dịch được thực hiện, 2 UTXO của TxID1 và TxID2 đã được tiêu thụ, và chỉ phát sinh 1 UTXO mới mà thôi. Do vậy, số lượng UTXO cần theo dõi trong UTXO set đã giảm đi 1. Trong khi với thời gian, kích thước blockchain chỉ có tăng chứ không giảm, thì kích thước UTXO set có thể dao động quanh một khoảng nhỏ hơn nhiều. Trong khi hiện nay tổng kích thước blockchain của Bitcoin đã lên tới hơn 350 Gigabyte, thì kích thước trung bình của UTXO set chỉ khoảng 3.5 Gigabyte, hoàn toàn đủ nhỏ để chứa hẳn trong bộ nhớ máy tính, qua đó tăng đáng kể tốc độ xác minh giao dịch của node.
+
+***Lưu ý:***
+
+- *Việc lưu trữ, quản lý UTXO set này là việc riêng của mỗi node. UTXO set không được lưu trên blockchain.*
+- *Thực tế cấu trúc dữ liệu cũng như cách thức xử lý các giao dịch và UTXO của Bitcoin phức tạp hơn rất nhiều. Tuy nhiên mục tiêu của bài này không phải để đi sâu vào các chi tiết đó.*
+
+## Phần 12: Tiền thừa, phí giao dịch và coinbase
+
+Quay trở lại ví dụ giao dịch của Chris, ta để ý rằng 2 UTXO đầu vào cung cấp cho nó 100 BTC (50 từ Ada và 50 từ Artyom), nhưng đầu ra chỉ có 90 BTC mà thôi (50 cho Leon, 40 cho Jill). Vậy còn 10 BTC thừa ra (change) thì xử lý ra sao?
+
+Bitcoin không tự động ghi nhận 10 BTC tiền thừa này lại cho Chris. Ta nhớ ở Phần 10 đã nói rằng Bitcoin không có khái niệm số dư. Mọi con số trên Bitcoin đều phải tính toán từ các giao dich và các UTXO. Nếu vậy, Chris sẽ bị mất toi 10 BTC hay sao?
+
+Dĩ nhiên Chris không muốn thế. Cho nên anh ta bổ sung thêm 1 nội dung nữa trong giao dịch của mình, đó là chuyển 10 BTC ngược trở lại cho mình. Như thế, sau khi thực hiện giao dịch TxID3, ta có 3 UTXO mới như sau:
+
+1. 50 BTC cho Leon.
+2. 40 BTC cho Jill.
+3. 10 BTC cho chính Chris.
+
+Việc chuyển lại tiền cho chính mình nghe rất khôi hài với hầu hết mọi người, nhưng nó rất có lý với Bitcoin. Bởi vì Bitcoin không phải đẻ thêm ra một cơ chế khác để quản lý số dư, mà lý do thì ta đã biết: số dư là một điểm rủi ro về an ninh, rất dễ bị tấn công khai thác.
+
+Trở lại với Chris. Trong lúc lập giao dịch, anh ta nghĩ rằng, có lẽ nên khuyến khích mọi người tham gia vào xử lý giao dịch của anh ta. Như thế mọi người sẽ nỗ lực hơn và vì thế giao dịch của anh ta sẽ được thực hiện nhanh hơn. Chris đang rất vội! Nhưng khích lệ mọi người bằng cách nào? Thôi thì để lại 1 BTC cho bất cứ ai đưa được giao dịch này vào blockchain. Vì thế, Chris điều chỉnh giao dịch chuyển tiền như sau:
+
+1. 50 BTC cho Leon.
+2. 40 BTC cho Jill.
+3. 9 BTC cho chính Chris.
+
+Như thế, còn thừa ra 1 BTC. Bitcoin có quy định rằng, nếu sau một giao dịch mà có một lượng tiền thừa, không thuộc vào một UTXO nào, thì nó sẽ chuyển số tiền thừa đó cho người nào có công đưa được giao dịch đó vào blockchain (tức là người tạo ra được block mới, trong đó chứa giao dịch này, và block đó được ghi nhận vào blockchain). Khoản tiền này được gọi là *phí giao dịch* (*transaction fee*).
+
+Khoản phí này được chuyển đến người có công tạo block thế nào? Bitcoin cho phép người tạo block đưa vào đầu danh sách của giao dịch của block một giao dịch đặc biệt, được gọi là *coinbase* transaction. Người được nhận tiền từ giao dịch coinbase chính là người tạo block, còn giá trị là tổng số tiền phí giao dịch từ tất cả các giao dịch trong block, cùng với 1 khoản thưởng đặc biệt, gọi là *block reward*. Ta sẽ bàn về block reward ở phần sau. Như vậy, nếu may mắn đến với Ada, và block của cô ấy được chấp nhận, thì Ada sẽ có thêm được một UTXO với số tiền ghi trong coinbase của block.
+
+Phần tiếp theo sẽ bàn về block reward và cơ chế đào (mining) bitcoin.
