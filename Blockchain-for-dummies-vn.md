@@ -116,9 +116,38 @@ Kết hợp thiết kế của blockchain, cơ chế đồng thuận ngang hàng
 - Tính công khai: bất kỳ ai cũng có thể truy xuất toàn bộ blockchain bất cứ lúc nào.
 - Tính đúng đắn: không ai có thể can thiệp thay đổi nội dung blockchain sai với thực tế để làm lợi cho riêng mình.
 
-Với những đặc trưng trên, blockchain rất thích hợp để ứng dụng vào một việc, đó là ghi lại các giao dịch. Nói cách khác, một blockchain chính là một cuốn sổ cái (ledger) tương tự như sổ cái dùng trong công tác kế toán tại các công ty. Chính vì vậy, ứng dụng blockchain mà Satoshi Nakamoto đã đưa ra trong đặc tả của mình chính là một loại tiền số hóa, được đặt tên là Bitcoin. Cái tên này có lẽ là sự kết hợp giữa chữ "bit", là đơn vị dữ liệu nhỏ nhất trong khoa học máy tính, và "coin", tức là đồng xu. Đơn vị tiền tệ biểu diễn giá trị các giao dịch trong "sổ cái" Bitcoin được quy định là "bitcoin", viết tắt là BTC. Ví dụ: trong một block nào đó của blockchain Bitcoin ghi rằng "Chris chuyển cho Leon một giá trị là X", thì ta hiểu rằng "X" ở đây là "X bitcoin" hay "X BTC". Thực tế thì hiện nay, do giá trị của một bitcoin rất lớn (~ 41.000 USD), nên người ta sử dụng "satoshi" (viết tắt "sat") để ghi nhận giá trị các giao dịch bitcoin trong blockchain. 1 satoshi = 0.00000001 BTC (một phần trăm triệu bitcoin).
+Với những đặc trưng trên, blockchain rất thích hợp để ứng dụng vào một việc, đó là ghi lại các giao dịch. Nói cách khác, một blockchain chính là một cuốn sổ cái (ledger) tương tự như sổ cái dùng trong công tác kế toán tại các công ty. Chính vì vậy, ứng dụng blockchain mà Satoshi Nakamoto đã đưa ra trong đặc tả của mình chính là một loại tiền số hóa, được đặt tên là Bitcoin. Cái tên này có lẽ là sự kết hợp giữa chữ "bit", là đơn vị dữ liệu nhỏ nhất trong khoa học máy tính, và "coin", tức là đồng xu. Đơn vị tiền tệ biểu diễn giá trị các giao dịch trong "sổ cái" Bitcoin được quy định là "bitcoin", viết tắt là BTC. Ví dụ: trong một block nào đó của blockchain Bitcoin ghi rằng "Chris chuyển cho Leon một giá trị là X", thì ta hiểu rằng "X" ở đây là "X bitcoin" hay "X BTC". Thực tế thì hiện nay, do giá trị của một bitcoin rất lớn (~ 41.000 USD), nên người ta sử dụng "satoshi" (viết tắt "sat") để ghi nhận giá trị các giao dịch bitcoin trong blockchain. 1 satoshi = 0,00000001 BTC (một phần trăm triệu bitcoin).
 
 Điểm khác biệt của "sổ cái" Bitcoin với sổ cái thông  thường đó là tính công khai, một trong 3 đặc trưng, như ta đã nói ở trên. Bất kỳ ai cũng có thể xem toàn bộ lịch sử giao dịch trên Bitcoin. Tuy nhiên, Satoshi đã đưa vào Bitcoin một thiết kế dữ liệu giao dịch, qua đó đem lại cho nó một đặc trưng nữa, đó là tính vô danh, hay nặc danh (anonymity). Trong dữ liệu một giao dịch của Bitcoin, không có danh tính của người gửi và người nhận, mà chỉ có các chuỗi địa chỉ trông có vẻ như là những chuỗi số và chữ cái ngẫu nhiên, và người ta gọi chúng là các địa chỉ ví (wallet address) Bitcoin.
 
-Ví và giao dịch Bitcoin sẽ được làm rõ hơn ở phần tiếp theo.
+Ví và giao dịch Bitcoin sẽ được làm rõ hơn ở các phần tiếp theo.
 
+## Phần 10: Giao dịch và xác minh giao dịch
+
+*Đây là một trong những phần có thể nói là khó hiểu và quan trọng nhất khi tìm hiểu cách thức hoạt động của Bitcoin.*
+
+Trước hết, cần phải hiểu cách mà Bitcoin xác minh và thực hiện các giao dịch gửi tiền (bitcoin) đến cho ta cũng như các giao dịch mà ta chuyển tiền cho người khác.
+
+Giả sử Chris cần chuyển cho Leon 50 BTC và cho Jill 40 BTC. Anh ta sẽ nói với mọi người thế nào? Có phải là: *"Này mọi người, tôi sẽ chuyển 50 cho Leon, và 40 cho Jill"*? OK được thôi. Vấn đề là, **Chris có đủ tiền để chuyển đi số tiền trên hay không**?
+
+Thông thường, khi có phát sinh giao dịch gửi hay nhận tiền, các hệ thống kế toán sẽ ghi nhận giao dịch, tính toán số dư (balance), rồi lưu số dư này lại để tính toán cho các giao dịch tiếp theo. Không nhất thiết phải tính toán và ghi nhận số dư sau mỗi giao dịch, nhưng thường việc này sẽ được thực hiện theo kỳ, ví dụ cuối ngày hay cuối tháng. Lý do của cách làm này, là để tăng tốc độ xử lý giao dịch. Thay vì phải cộng trừ tất cả các giao dịch từ đầu của cả hệ thống cho đến trước giao dịch cần thực hiện, để xem số dư còn đáp ứng hay không, thì hệ thống chỉ cần làm thế với các giao dịch từ đầu kỳ. Dù sao, tính toán số lượng giao dịch của một vài ngày vẫn nhanh hơn là vài năm, phải không?
+
+Tuy nhiên, phương pháp trên tiềm ẩn rủi ro rất lớn. Chris có thể sinh ra tham lam, và tìm cách sửa số dư đầu kỳ của anh ta để có nhiều tiền hơn. Vì hệ thống chỉ xác minh giao dịch dựa trên số dư đầu kỳ, nên Chris chỉ cần can thiệp vào con số này và một số lượng nhỏ giao dịch trước đó trong kỳ. Như thế rõ ràng là đỡ tốn công sức hơn là phải chỉnh sửa toàn bộ các giao dịch từ đầu hệ thống.
+
+Với tầm nhìn về một hệ thống xử lý giao dịch công khai theo mô hình mạng phân tán ngang hàng có quy mô toàn cầu, Bitcoin cần phải được thiết kế sao cho rủi ro bị tấn công, sửa đổi là thấp nhất. **Vì thế, trong Bitcoin, chẳng có cái gì gọi là số dư cả**.
+
+Vậy nếu Chris muốn chuyển 50 BTC cho Leon và 40 BTC cho Jill, thì anh ta làm thế nào để thuyết phục mọi người là anh ta có đủ ít nhất 90 BTC để thực hiện 2 giao dịch trên? Vì nếu anh ta không chứng minh được rằng anh ta đang có ít nhất 90 BTC trong tay, thì mạng lưới Bitcoin, tức là những người khác: Leon, Jill, Ada, Claire, Artyom..., sẽ không chấp nhận 2 giao dịch mà anh ta đang muốn tiến hành.
+
+*Trong Bitcoin blockchain, mọi giao dịch đều được định danh bởi một chuỗi mã số, gọi là mã số định danh giao dịch (Transaction's Identification - TxID). Ta sẽ nói một cách ngắn gọn là mã giao dịch. Khi một giao dịch được chấp nhận vào ghi vào blockchain, thì cả dữ liệu của giao dịch lẫn mã giao dịch của nó đều được lưu giữ.*
+
+Và đây là cách mà Chris làm để thuyết phục mọi người rằng anh ta có đủ tiền để thực hiện 2 giao dịch mong muốn. Anh ta cung cấp cho mọi người một danh sách các mã số giao dịch trước đó (đã được ghi trên blockchain), trong đó Chris là người được nhận tiền. Ví dụ, Chris bảo: *"Này mọi người, trước đây Ada và Artyom đã chuyển cho tôi một số tiền, mã giao dịch của chúng là TxID1 và TxID2, và bây giờ, tôi sẽ chuyển cho Leon 50 BTC, và chuyển cho Jill 40 BTC"*. Những giao dịch mà Chris liệt kê trong đó anh ta là người nhận tiền, được gọi là các giao dịch đầu vào (*input transaction*s), ở đây là *TxID1* và *TxID2*. Mọi người sẽ rà soát trên blockchain để tìm kiếm 2 giao dịch có mã số *TxID1* và *TxID2*, sau đó kiểm tra nội dung các giao dịch này, mục đích là để kiểm tra các thông tin sau đây:
+
+1. Các giao dịch trên có phải là chuyển tiền cho Chris hay không.
+2. Số tiền của mỗi giao dịch là bao nhiêu.
+3. Tổng số tiền Chris nhận được từ các giao dịch đầu vào trên có đủ để anh ta thực hiện các giao dịch chuyển tiền đi hay không?
+
+Nếu các thông tin trên là đúng, thì giao dịch của Chris sẽ được chấp nhận (verified) và sẽ được ghi vào blockchain.
+
+Ở đây ta thấy rằng để kiểm tra một giao dịch mới, mọi người phải rà soát toàn bộ các transactions trong cả blockchain. Tại thời điểm viết bài này, tổng số giao dịch của Bitcoin đã lên tới gần 680 triệu, và trung bình có tới hơn 260 nghìn giao dịch mới mỗi ngày. Như vậy, việc xác minh giao dịch hẳn nhiên phải trở nên rất chậm chạp và hạn chế khả năng mở rộng của Bitcoin. 
+
+Phải có cách nào đó tốt hơn để khắc phục vấn đề này. Giải pháp đó sẽ được trình bày ở phần tiếp theo.
