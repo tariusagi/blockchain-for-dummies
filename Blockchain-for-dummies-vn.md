@@ -1,7 +1,6 @@
 # Blockchain & Bitcoin cho phó thường dân
 
 ![Bitcoin](assets/title-vn.jpg)
-
 *[Image by MichaelWuensch from Pixabay](https://pixabay.com/users/michaelwuensch-4163668/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=2007769)*
 
 Nhà bác học Einstein từng nói: *"Nếu anh không thể giải thích vấn đề một cách đơn giản, nghĩa là anh chưa thực sự hiểu nó"*.
@@ -10,7 +9,7 @@ Blockchain là một khái niệm không còn mới với dân công nghệ, nh�
 
 Như một nỗ lực trong việc tự đánh giá lại khả năng hiểu biết của bản thân trong quá trình nghiên cứu về blockchain và các ứng dụng của nó, tôi sẽ cố gắng viết lại theo cách *dễ hiểu nhất* có thể, những gì mình thu lượm được về lĩnh vực này. Các bài viết sẽ được đăng thành nhiều phần, song hành với quá trình nghiên cứu của tôi, như một dạng kết quả được đúc rút lại, trong những comment bên trong post này.
 
-Các thông tin tham khảo phần lớn sẽ đến từ đồng tiền số đầu tiên ứng dụng blockchain: [Bitcoin](https://bitcoin.org).
+Các thông tin tham khảo phần lớn sẽ đến từ đồng tiền số đầu tiên ứng dụng blockchain: [Bitcoin][1]. 
 
 ## Phần 1: Blockchain là gì?
 
@@ -52,7 +51,7 @@ Tuy nhiên, nếu ta chẳng biết được bồi thẩm đoàn gồm những a
 
 ## Phần 5: Đồng thuận ngang hàng phi tập trung
 
-Satoshi Nakamoto, một hoặc một nhóm người ẩn danh, đã đưa ra cách giải quyết bài toán đồng thuận phi tập trung trong *đặc tả* (*whitepaper*) về Bitcoin. Có thể xem tại [đây](https://bitcoin.org/bitcoin.pdf).
+Satoshi Nakamoto, một hoặc một nhóm người ẩn danh, đã đưa ra cách giải quyết bài toán đồng thuận phi tập trung trong [*đặc tả*][2] (*whitepaper*) về Bitcoin.
 
 Trở lại với lối diễn giải của chúng ta, thay vì lựa chọn bồi thẩm đoàn trước khi phiên tòa diễn ra, chúng ta mang phiên tòa ra quảng trường và công bố bất kỳ ai nếu muốn cũng có thể tới đó tham dự và đưa ra phán quyết của riêng mình, tức là một phiếu bầu (vote). Mỗi phiếu bầu có vai trò ngang nhau, trên đó không ghi danh tính gì hết (*anonymous*). Phán quyết cuối cùng sẽ dựa trên cơ chế đa số (*majority*).
 
@@ -198,15 +197,25 @@ Khoản phí này được chuyển đến người có công tạo block thế 
 
 Phần tiếp theo sẽ bàn về block reward và cơ chế đào (mining) bitcoin.
 
-## Phần 13: Những người thợ mỏ
+## Phần 13: Block reward, halving, thợ đào và pool
 
-TODO: hoàn thành phần này.
+Khởi đầu của Bitcoin, trong mang lưới không có lấy một satoshi nào. Lượng tiền số lưu hành trên nó là con số 0 tròn trĩnh.
+
+Để phát hành tiền bitcoin đưa vào lưu hành, nhóm phát triển Bitcoin đưa ra cơ chế đào (mine) bitcoin như sau:
+
+- Với mỗi block mới được ghi vào blockchain, người tạo block đó được thưởng một lượng bitcoin mới (chưa có trên mạng lưới). Có thể hiểu lượng bitcoin "đào" được này như việc in thêm tiền. Phần thưởng này được gọi là "*block reward*".
+- Những người chạy các node (các máy tính) để tham gia vào việc tính toán, xác minh giao dịch, tạo lập các block, được gọi là các "*thợ mỏ*" hay "*thợ đào*" (*miner*).
+- Để kìm chế lạm phát, cứ mỗi 210.000 block, Bitcoin giảm số lượng block reward đi một nửa, goi là *halving*. Bitcoin được thiết kế để ra một block mới mỗi 10 phút. Như thế, sau khoảng mỗi 4 năm thì phần thưởng cho "thợ đào" lại giảm đi một nửa. Năm 2008, khi mới đi vào hoạt động, block reward là 50 BTC (Satoshi chính là người được hưởng phần thưởng 50 BTC đầu tiên khi tạo ra block zero, hay còn gọi là *genesis block*). Đến 2012, phần thưởng còn 25 BTC. Năm 2016, là 12,5 BTC. Và tại thời điểm viết bài này, năm 2021, phần thưởng này chỉ còn 6,25 BTC. Với quy định này, đến năm 2137, sẽ không còn phần thưởng nào cho thợ đào nữa, và số lượng BTC của Bitcoin dừng lại ở con số xấp xỉ 21 triệu BTC.
+- Xác suất để một thợ đào may mắn tạo được một block mới trên blockchain của Bitcoin để nhận block reward tỉ lệ theo phần trăm năng lực tính toán của node do anh ta vận hành so với tổng năng lực tính toán của toàn mạng lưới. Năng lực tính toán này được đo theo số lượng hash tính được trong một giây (xem [Phần 6](#proof-of-work)), và thường được ghi là Gh/s (Gigahash trên giây, 1 Gh = 1 tỷ hash). Hiện tại, tổng công suất tính toán của của mạng lưới Bitcoin là khoảng 122,77 M TH/s (122,77 tỷ Gh/s, hay là 122,77 x 10<sup>18</sup> H/s). Để hình dung, một máy tính để bàn sử dụng loại CPU phổ biến hiện nay là Intel Core i5 có công suất tính toán khoảng 800 H/s.
+- Vì khả năng để một thợ đào riêng lẻ đào được block reward là rất thấp, nên rất nhiều thợ đào đang cùng tham gia vào một hình thái hợp tác xã, gọi là mining pool, để cùng nha đào bitcoin. Khi một máy tính trong pool may mắn đào được một lượng bitcoin, một phần của phần thưởng đó sẽ được chia cho những người khác theo tỉ lệ đóng góp công suất tính toán chung của pool. Như thế, thu nhập của mỗi thợ đào sẽ ổn định hơn.
 
 ## Phần 14: Ví, chữ ký, và chùm chìa khóa
 
 Trong [Phần 9](#phần-9-sổ-cái-và-bitcoin), ta đã nói rằng địa chỉ nhận tiền trong các giao dịch của Bitcoin là một chuỗi chữ và số có vẻ ngẫu nhiên và được gọi là địa chỉ ví Bitcoin. Chúng giúp che giấu danh tính của người nhận, tạo nên đặc tính vô danh, một trong những đặc tính cốt lõi của nền tảng Bitcoin.
 
 Khi ta muốn nhận hay gửi tiền qua ngân hàng, trước tiên, ta cần mở tài khoản. Khi ta chuyển tiền đi, hoặc khi có ai đó chuyển tiền cho ta, thì số tài khoản của người nhận cần được ghi vào trong lệnh chuyển tiền. Số tài khoản này, thực chất, được ánh xạ vào trong một cơ sở dữ liệu tập trung của ngân hàng, tại đó lưu giữ rất nhiều thông tin định danh của người nhận: tên, ngày sinh, giới tính, địa chỉ thường trú, số chứng minh nhân dân... Như vậy, cơ chế quản lý tài khoản của ngân hàng hoàn toàn không phải là cơ chế vô danh. Điều này là cần thiết với hoạt động của ngân hàng, nhưng nó tạo ra rủi ro xâm phạm quyền riêng tư của khách hàng.
+
+### Ví
 
 Với Bitcoin, ta cũng cần có tài khoản, hay gọi một cách thông dụng hơn trong giới tiền số (Bitcoin là một loại tiền số, cryptocurrency), là ví (wallet). Có lý do cho cách gọi này. Đó là tài khoản thường gắn với thông tin định danh, còn ví thì không. Anh có thể nhét chứng minh thư, bằng lái xe... vào ví, và khi đó cái ví không chỉ chứa tiền, mà còn chứa thông tin định danh người sở hữu ví, và có thể nói, khi đó nó có tính chất của một tài khoản. Nhưng dĩ nhiên, không ai bắt anh phải nhét giấy tờ nhân thân vào ví, khi đó, nó chỉ có mỗi một việc là chứa tiền của anh. Nếu anh đánh rơi ví, người khác nhặt được nó, họ sẽ không biết nó thuộc về ai cả. Khi đó, ví mang tính chất vô danh. Do vậy, ví là một thuật ngữ phù hợp hơn để sử dụng trong bối cảnh của Bitcoin, và các đồng tiền số tương tự.
 
@@ -218,13 +227,92 @@ Trên một lệnh chuyển tiền ngân hàng (chỉ xét trường hợp trong
 
 Trong đó, quan trọng nhất là chữ ký của người gửi, tức chủ tài khoản. Nếu chữ ký không đúng với mẫu đã đăng ký cho tài khoản, lệnh chuyển tiền này sẽ bị từ chối xử lý ngay lập tức.
 
-Trở lại với ví dụ của chúng ta. Với Bitcoin, không có cái gì gọi là thông tin tài khoản, mẫu chữ ký. Vậy thì Chris ký xác nhận lệnh chuyển tiền, tức giao dịch TXID3, thế nào? Làm sao để những người khác xác minh lệnh này do chính Chris đưa ra?
+Trở lại với ví dụ của chúng ta. Với Bitcoin, không có cái gì gọi là thông tin tài khoản, mẫu chữ ký. Vậy thì Chris ký xác nhận lệnh chuyển tiền, tức giao dịch TxID3, thế nào? Làm sao để những người khác xác minh lệnh này do chính Chris đưa ra?
 
 Ở đây, ta cần chấp nhận tìm hiểu thêm một khái niệm mới có tính kỹ thuật một chút: đó là *"chìa khóa"* (*key*). Mà thực ra là 2 loại chìa: *chìa công khai* (*public key - PK*) và *chia riêng tư* (*secret/private key - SK*).
+
+### Chữ ký
 
 Giới khoa học máy tính từ lâu đã phát minh ra một số thuật toán, được gọi là mã hóa khóa công khai (Public Key Cryptoghraphy - PKC). Đặc điểm của phương thức mã hóa này là *bất đối xứng* (*asymetric*). Điều đó có nghĩa là sao?
 
 Thông thường, khi cần mã hóa dữ liệu, ta sẽ sử dụng một cụm từ ngữ, khi kết hợp nó với thuật toán mã hóa, sẽ mã hóa dữ liệu đầu vào thành một khối dữ liệu đầu ra khác hẳn và vô nghĩa. Muốn giải mã khối dữ liệu đầu ra này, ta cần cụm từ ngữ kia, cho chạy qua thuật toán để giải mã ngược lại. Đây là phương thức mã hóa đối xứng (symetric). Để mã hóa hay giải mã, ta chỉ cần sử dụng cùng một cụm từ ngữ, đó chính là chìa khóa để mã hóa và giải mã.
 
-Với PKC thì khác hẳn. PKC sinh ra không phải một, mà là một cặp chìa khóa, bao gồm một khóa công khai (PK) và một khóa riêng tư (SK). Dữ liệu bị mã hóa bởi khóa riêng tư chỉ có thể được giải mã bởi khóa công khai tương ứng.
+Với PKC thì khác hẳn. PKC sinh ra không phải một, mà là một cặp chìa khóa, bao gồm một khóa công khai (Public Key) và một khóa riêng tư (Secret Key - SK). Dữ liệu bị mã hóa bởi khóa riêng tư chỉ có thể được giải mã bởi khóa công khai tương ứng. Tại sao lại có cái gọi là công khai và riêng tư này? Hai cái tên đó xuất phát từ ý nghĩa sử dụng của mỗi loại khóa. Khóa công khai, là chìa mà ta công khai chia sẻ cho những người khác, còn khóa riêng tư, là chìa mà ta giữ bí mật cho riêng mình. Mục đích làm như vậy làm để làm gì? Ta xét ví dụ sau:
+
+Chris gửi cho Ada một bức thư. Vì trong quá trình chuyển phát, một kẻ trung gian nào đó, ví dụ chính tay bưu tá, có thể đọc trộm, và thậm chí thay đổi nội dung bức thư (giả mạo), cho nên Chris cần một phương thức nào đó để đảm bảo 2 mục tiêu:
+
+1. Mã hóa nội dung thư, và chỉ người nhận đích danh (Ada) mới giải mã được.
+2. Người nhận thư yên tâm rằng nội dung thư không bị sửa đổi, và nó thực sự đến từ người gửi đích danh (Chris).
+
+Để làm được như vậy, Chris sử dụng thuật toán PKC tạo ra một cặp khóa riêng tư (SK) và khóa công khai (PK). Anh ta dùng SK để mã hóa nội dung thư, và nhắn tin cho Ada biết PK của mình. Khi tay bưu tá mở bức thư của Chris ra, hắn thấy một mớ ký tự hỗn độn, không tài nào hiểu được, và Chris đạt mục tiêu thứ nhất. Sau đó, thư đến tay Ada. Cô ấy thấy bức thư đề người gửi là Chris, vì vậy, cô ấy tìm lại trong các tin nhắn cái PK từ Chris, và thử giải mã bức thư với PK này. Nếu Ada giải mã thành công, thì cô ấy sẽ đọc được nội dung thư, đồng thời yên tâm rằng thư này đúng là từ Chris. Nếu Ada không giải mã được, nghĩa là bức thứ này không phải đến từ Chris.
+
+Như vậy, với PKC, ta có được trong tay phương thức mã hóa vừa đảm bảo bảo mật dữ liệu, lại vừa có khả năng xác minh nguồn gốc của nó.
+
+Trở lại với bài toán xác minh lệnh chuyển tiền. Chris hoàn toàn có thể áp dụng cùng phương pháp với gửi thư. Anh ta có thể dùng SK để mã hóa nội dung chuyển tiền, và thông báo PK tương ứng cho tất cả mọi người, để mọi người có thể dùng PK đó để giải mã lệnh chuyển tiền, qua đó xác nhận lệnh này đúng là của Chris, và sau đó xác minh nội dung chuyển tiền là hợp lệ (ví dụ số dư hiện có của Chris đủ để chuyển tiền đi). Tuy nhiên, phương pháp này có một nhược điểm: nó làm lộ danh tính của Chris, vì mọi người biết PK này là của anh ta.
+
+Với Bitcoin, mọi người không cần quan tâm ai là người tạo giao dịch, ai là người nhận. Như thế mới đảm bảo tính vô danh của mạng lưới. Nhưng việc xác minh giao dịch hợp lệ vẫn phải được tiến hành. Vậy giải quyết vấn đề này ra sao? 
+
+Satoshi đưa ra ý tưởng như sau: với mỗi giao dịch chuyển tiền đi, người lập giao dịch sẽ lấy nội dung giao dịch, chạy nó qua thuật toán hash, rồi sử dụng SK của mình để mã hóa chuỗi hash, và sinh ra một mẩu dữ liệu, được gọi là chữ ký số (digital signature) của giao dịch. Thao tác sử dụng SK để mã hóa vừa nói chính là thao tác ký nhận dữ liệu (signing). Người lập giao dịch sẽ đính kèm chữ ký này vào dữ liệu giao dịch, và gửi lên mạng lưới. Như vậy, dữ liệu của một giao dịch mới sẽ gồm:
+
+1. Danh sách giao dịch đầu vào (TxID1, TxID2).
+2. Địa chỉ người nhận và số tiền cần chuyển (50 BTC cho Leon, và 40 cho Jill).
+3. Chữ ký số của Chris.
+
+Lưu ý là ở nội dung (2) trên đây, thay vì 2 cái tên Leon và Jill, thì Chris điền vào đó 2 PK, một là của Leon, và PK còn lại là của Jill. Vì sao anh ta lại biết PK của Leon và Jill? Là vì chính Leon và Jill đã cung cấp cho Chris. Trước khi chuyển tiền, Chris nhắn tin cho Leon và bảo *"Này Leon, anh sẽ chuyển cho chú 50 BTC, chú đưa anh cái địa chỉ ví của chú để anh vào lệnh"*, và Leon sẽ trả lời: *"OK Chris, anh chuyển vào ví có địa chỉ **1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2** nhé"*. Chuỗi ký tự rắc rối trong tin nhắn của Leon chính là địa chỉ ví của anh ta, và nó chính là PK của Leon. Tương tự, Jill sẽ chuyển cho Chris địa chỉ ví của mình, tức là PK của cô ấy. Như vậy, nội dung giao dịch của Chris chính xác là như sau:
+
+1. Danh sách giao dịch đầu vào (TxID1, TxID2).
+2. Địa chỉ ví (PK) của người nhận và số tiền cần chuyển.
+3. Chữ ký số của Chris.
+
+Toàn bộ nội dung trên sẽ được đưa lên mạng lưới để mọi người cùng biết. Bây giờ, để xác minh giao dịch TxID3 của Chris mới đưa lên, mỗi người trên mạng, ví dụ là Ada, sẽ làm như sau (xem lại [Phần 10](#Giao dịch và xác minh giao dịch)):
+
+1. Xem lại nội dung các giao dịch đầu vào TxID1 và TxID2. Trong 2 giao dịch này có địa chỉ ví người nhận, đều là PKx. Nên nhớ rằng, các địa chỉ ví này là những chuỗi chữ số vô nghĩa, và không ai biết chúng gắn với ai. Vì vậy, tạm ký hiệu nó là PKx. Ada sẽ tạm ghi nhớ PKx này.
+2. Lấy nội dung TxID3, bỏ ra phần chữ ký số của nó, cho chạy qua thuật toán hash, ra được chuỗi hash H1.
+3. Bây giờ dùng chìa khóa PKx để giải mã chữ ký số của TxID3 ra được chuỗi hash H2.
+4. So sánh H1 và H2. 
+
+Nếu H1 và H2 bằng nhau, nghĩa là giao dịch TxID3 hợp lệ. *Điểm thú vị ở đây là Ada hoàn toàn không biết TxID3 do ai tạo ra*, nhưng cô ấy biết rằng người đó đúng là người đã ký giao dịch TxID3, và người này đúng là người được nhận tiền từ các giao dịch đầu vào TxID1 và TxID2. Như thế là đủ để Ada đồng ý rằng TxID3 là hợp lệ và sẽ đưa nó vào trong block mà cô ấy đang tạo lập.
+
+Như vậy, thay vì sử dụng thông tin định danh, trên mạng lưới Bitcoin, người ta sử dụng PK và SK, trong đó:
+
+- PK, khóa công khai, dùng để nhận tiền, và để xác minh giao dịch.
+- SK, khóa riêng tư, dùng để ký xác nhận giao dịch chuyển tiền đi.
+
+Với người sở hữu ví Bitcoin, và không quan tâm đến chi tiết phía sau hệ thống tạo lập và xác minh giao dịch, thì anh ta chỉ cần biết như sau:
+
+- *PK được dùng để nhận tiền*, vì thế, anh ta có thể đưa nó cho bất cứ ai cần chuyển tiền cho anh ta.
+- *SK được dùng để tiêu tiền*. Và vi thế, anh ta phải **giữ bí mật** cho riêng mình.
+
+### Chùm chìa khóa và bản chất của ví điện tử
+
+Chris là một anh chàng cẩn thận, và không muốn những kẻ tọc mạch lần ra địa chỉ ví nào đó là của anh ta, trừ người cần chuyển tiền cho anh ta.
+
+Vì vậy, Chris nghĩ ra một cách: cứ mỗi lần một người mới nào đó muốn chuyển tiền cho anh ta, thì anh ta sinh ra một cặp chìa SK - PK, và anh ta chuyển PK mới này cho người đó. Như thế trên blockchain có thể có hàng chục giao dịch chuyển tiền, mỗi trong số chúng lại có địa chỉ ví nhận khác nhau, nhưng thực chất đều là của Chris. Và vì thế, Chris có trong tay cả một chùm chìa khóa.
+
+Nhưng việc quản lý cả chùm chìa khóa như thế thật vất vả. Mỗi cặp chìa lại tương ứng với một khoản tiền riêng biệt (ta nhớ rằng để tiêu tiền gửi đến một PK thì ta cần có SK tương ứng). Riêng việc rà soát để tính tổng số tiền hiện có cũng khiến Chris đau đầu.
+
+Để hỗ trợ người như Chris, đội ngũ phát triển Bitcoin viết ra một phần mềm. Phần mềm này giúp Chris thực hiện tất tần tật những việc liên quan đến quản lý chùm chìa khóa và tiền bitcoin của anh ta, một cách dễ dàng, thuận tiện. Với phần mềm này, Chris có thể:
+
+- Tạo ra các địa chỉ nhận tiền (PK, và kèm theo đó là SK tương ứng).
+- Tự tổng hợp số dư dựa trên các giao dịch nhận và gửi tiền liên quan đến Chris.
+- Tạo lập các giao dịch chuyển tiền.
+
+Để bảo mật cho dữ liệu chứa trong phần mềm này, Chris mã hóa nó bằng một mật khẩu mà chỉ anh ta biết. Không ai có thể khai thác dữ liệu của Chris mà không giải mã nó bằng mật khẩu này. Điểm độc đáo của phần mềm này, là nó chỉ cần mật khẩu đúng là có thể khôi phục toàn bộ dữ liệu (chùm chìa khóa) cho Chris, mà không cần bất kỳ dữ liệu nào khác. Vì vậy, Chris có thể viết mật khẩu vào một mẩu giấy và cất vào két sắt, yên tâm rằng dù có sự cố khiến tất cả máy tính và điện thoại của anh ta bị mất, thì anh ta chỉ cần cài đặt phần mềm này, cung cấp cho nó mật khẩu viết trên mẩu giấy, thì toàn bộ chùm chìa khóa, cùng với đó là tất cả số bitcoin của anh ta, sẽ được khôi phục và có thể sử dụng ngay lập tức. Trong thực tế, mật khẩu này thường là một tập các từ tiếng Anh có tính dễ nhớ, sắp xếp theo thứ tự, tiện cho ghi chép lại. Người ta gọi chúng là "master password", "master phrases", "recovery phrases", "secret phrases"... ***Trong bất cứ trường hợp nào, hãy luôn giữ chúng thật kỹ cho riêng mình, đừng đánh mất, đừng để lộ cho bất kỳ ai***. Mất mật khẩu ví này, là ta thực sự mất toàn bộ số tiền trong đó, mà **không thể khôi phục** được.
+
+Chính vì vậy, khác với ví thông thường là vật chứa tiền mặt, thì *ví điện tử, hay ví bitcoin, là phần mềm, hay công cụ, dùng để sản sinh, quản lý tập hợp các chìa khóa mã hóa, và cung cấp các tiện ích quản lý tiền số* của một người trên mạng lưới Bitcoin. Khái niệm này cũng đúng với các loại tiền số khác.
+
+Do vậy, khi ta sử dụng ví Bitcoin (hoặc các loại ví tiền số khác), ta có thể thấy mỗi lần ta yêu cầu nó đưa cho ta một địa chỉ để nhận tiền của người khác gửi đến, thì nó có thể đưa ra một địa chỉ khác nhau. Đừng lo, chúng vẫn nằm trong chùm chìa khóa của ví ta. Chúng được sinh ra khác nhau để tăng cường tính vô danh, tránh cho ta nguy cơ bị theo dõi, bị hack. Vì vậy, số tiền chuyển đến chúng, cuối cùng vẫn thuộc sở hữu của ta, và được cộng vào số dư chung của ví.
+
+*Lưu ý rằng những điều nêu ra trong phần này được diễn giải để trở nên dễ hiểu, với mục đích giải thích nguyên lý cơ bản của Bitcoin. Trên thực tế thì phức tạp hơn, ví dụ:*
+
+- *Địa chỉ nhận tiền không đơn giản là PK của người nhận, mà là một chuỗi được mã hóa nhiều bước từ PK đó.*
+- *Quy trình xác minh không đơn giản là lấy PK từ giao dịch đầu vào để giải mã chữ ký của người gửi, mà là thực thi một đoạn mã lập trình trước được gắn với giao dịch.*
+- *Để đòi hỏi và sử dụng số tiền (UTXO) được gửi cho mình, ta cần phải sử dụng PK của ta để thực thi một đoạn mã lập trình trước được gắn với giao dịch chuyển tiền, gọi là đoạn mã mở khóa (unlock script).*
+
+## Tài liệu tham khảo
+
+[1]: https://bitcoin.org "Bitcoin Project"
+[2]: https://bitcoin.org/bitcoin.pdf "Bitcoin: A Peer-to-Peer Electronic Cash System"
+
+
 
