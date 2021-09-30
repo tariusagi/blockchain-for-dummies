@@ -1,6 +1,7 @@
 # Blockchain & Bitcoin cho phó thường dân
 
 ![Bitcoin](assets/title-vn.jpg)
+
 *[Image by MichaelWuensch from Pixabay](https://pixabay.com/users/michaelwuensch-4163668/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=2007769)*
 
 Nhà bác học Einstein từng nói: *"Nếu anh không thể giải thích vấn đề một cách đơn giản, nghĩa là anh chưa thực sự hiểu nó"*.
@@ -9,7 +10,7 @@ Blockchain là một khái niệm không còn mới với dân công nghệ, nh�
 
 Như một nỗ lực trong việc tự đánh giá lại khả năng hiểu biết của bản thân trong quá trình nghiên cứu về blockchain và các ứng dụng của nó, tôi sẽ cố gắng viết lại theo cách *dễ hiểu nhất* có thể, những gì mình thu lượm được về lĩnh vực này. Các bài viết sẽ được đăng thành nhiều phần, song hành với quá trình nghiên cứu của tôi, như một dạng kết quả được đúc rút lại, trong những comment bên trong post này.
 
-Các thông tin tham khảo phần lớn sẽ đến từ đồng tiền số đầu tiên ứng dụng blockchain: [Bitcoin][1]. 
+Các thông tin tham khảo phần lớn sẽ đến từ đồng tiền số đầu tiên ứng dụng blockchain: [Bitcoin](https://bitcoin.org). 
 
 ## Phần 1: Blockchain là gì?
 
@@ -51,7 +52,7 @@ Tuy nhiên, nếu ta chẳng biết được bồi thẩm đoàn gồm những a
 
 ## Phần 5: Đồng thuận ngang hàng phi tập trung
 
-Satoshi Nakamoto, một hoặc một nhóm người ẩn danh, đã đưa ra cách giải quyết bài toán đồng thuận phi tập trung trong [*đặc tả*][2] (*whitepaper*) về Bitcoin.
+Satoshi Nakamoto, một hoặc một nhóm người ẩn danh, đã đưa ra cách giải quyết bài toán đồng thuận phi tập trung trong [*đặc tả*](https://bitcoin.org/bitcoin.pdf) (*whitepaper*) về Bitcoin.
 
 Trở lại với lối diễn giải của chúng ta, thay vì lựa chọn bồi thẩm đoàn trước khi phiên tòa diễn ra, chúng ta mang phiên tòa ra quảng trường và công bố bất kỳ ai nếu muốn cũng có thể tới đó tham dự và đưa ra phán quyết của riêng mình, tức là một phiếu bầu (vote). Mỗi phiếu bầu có vai trò ngang nhau, trên đó không ghi danh tính gì hết (*anonymous*). Phán quyết cuối cùng sẽ dựa trên cơ chế đa số (*majority*).
 
@@ -309,10 +310,9 @@ Do vậy, khi ta sử dụng ví Bitcoin (hoặc các loại ví tiền số kh�
 - *Quy trình xác minh không đơn giản là lấy PK từ giao dịch đầu vào để giải mã chữ ký của người gửi, mà là thực thi một đoạn mã lập trình trước được gắn với giao dịch.*
 - *Để đòi hỏi và sử dụng số tiền (UTXO) được gửi cho mình, ta cần phải sử dụng PK của ta để thực thi một đoạn mã lập trình trước được gắn với giao dịch chuyển tiền, gọi là đoạn mã mở khóa (unlock script).*
 
-## Tài liệu tham khảo
-
-[1]: https://bitcoin.org "Bitcoin Project"
-[2]: https://bitcoin.org/bitcoin.pdf "Bitcoin: A Peer-to-Peer Electronic Cash System"
+## Nguồn tham khảo
+1. [Bitcoin Project](https://bitcoin.org)
+2. [Bitcoin Whitepaper](https://bitcoin.org/bitcoin.pdf)
 
 
 
