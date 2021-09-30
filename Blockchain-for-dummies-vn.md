@@ -100,7 +100,7 @@ Nội dung này sẽ được trình bày ở phần tiếp theo.
 
 ## Phần 8: Longest chain
 
-Khi một node tạo ra một block hợp lệ, nó sẽ thông báo cho tất cả node khác trong *mạng lưới* (*network*) blockchain. Sẽ luôn xảy ra trường hợp gần như cùng một lúc, một node sẽ nhận được những block mới từ những node khác nhau. Khi ấy, nó sẽ chọn block đầu tiên để đưa vào blockchain của mình và tiếp tục làm việc để tạo lập block tiếp theo. Tuy nhiên, các block đến sau vẫn được nó lưu lại để dự phòng. Đến khi block tiếp theo được tạo lập, một trong các nhánh (branch) của blockchain sẽ trở nên dài hơn các nhánh còn lại. Theo nguyên tắc, node này sẽ chấp nhận đi theo *nhánh dài nhất* (*longest branch/chain*), tức là có số lượng block hợp lệ lớn nhất, đồng nghĩa với khối lượng công việc đã thực hiện nhiều nhất. Các block thuộc những nhánh còn lại, mặc dù hợp lệ (thỏa mãn độ khó) sẽ bị loại bỏ, và chúng được gọi là block *mồ côi* (*orphan block*) hoặc block *chú* (*uncle block*, so sánh với *parent block*, là block nằm trước trên nhánh chính).
+Khi một node tạo ra một block hợp lệ, nó sẽ thông báo cho tất cả node khác trong *mạng lưới* (*network*) blockchain. Sẽ luôn xảy ra trường hợp gần như cùng một lúc, một node sẽ nhận được những block mới từ những node khác nhau. Khi ấy, nó sẽ chọn block đầu tiên để đưa vào blockchain của mình và tiếp tục làm việc để tạo lập block tiếp theo. Tuy nhiên, các block đến sau vẫn được nó lưu lại để dự phòng. Đến khi block tiếp theo được tạo lập, một trong các nhánh (branch) của blockchain sẽ trở nên dài hơn các nhánh còn lại. Theo nguyên tắc, node này sẽ chấp nhận đi theo *nhánh dài nhất* (*longest branch/chain*), tức là có số lượng block hợp lệ lớn nhất, đồng nghĩa với khối lượng công việc đã thực hiện nhiều nhất. Các block thuộc những nhánh còn lại, mặc dù hợp lệ (thỏa mãn độ khó) sẽ bị loại bỏ, và chúng được gọi là *uncle block* (so sánh với *parent block*, là block nằm trước trên nhánh chính).
 
 Ví dụ, blockchain hiện là A-B-C-D-E, và trong khi đang tìm nonce cho block mới là F, thì Chris gần như đồng thời nhận được từ Leon và Jill 2 block mới hợp lệ (có nonce khác nhau, nhưng hash tổng vẫn thỏa mãn độ khó) gọi là F1 và F2. Chris sẽ dừng việc tìm F, chấp nhận sử dụng block F1 của Leon như block mới (dù nó chỉ đến trước Jill vài phần trăm giây), và lưu block F2 của Jill lại để dự phòng. Như vậy, trong tay Chris đang có 2 chain sau: "A-B-C-D-E-F1" (chain chính) và "A-B-C-D-E-F2" (chain dự phòng). Gộp lại ta có hình ảnh của một cành cây 2 nhánh, chia tách từ sau block E. Sau đó Chris tiếp tục tìm kiếm block mới (G) trên nhánh Leon.
 
@@ -228,7 +228,7 @@ Trên một lệnh chuyển tiền ngân hàng (chỉ xét trường hợp trong
 
 Trong đó, quan trọng nhất là chữ ký của người gửi, tức chủ tài khoản. Nếu chữ ký không đúng với mẫu đã đăng ký cho tài khoản, lệnh chuyển tiền này sẽ bị từ chối xử lý ngay lập tức.
 
-Trở lại với ví dụ của chúng ta. Với Bitcoin, không có cái gì gọi là thông tin tài khoản, mẫu chữ ký. Vậy thì Chris ký xác nhận lệnh chuyển tiền, tức giao dịch TxID3, thế nào? Làm sao để những người khác xác minh lệnh này do chính Chris đưa ra?
+Trở lại với ví dụ của chúng ta. Với Bitcoin, không có cái gì gọi là thông tin tài khoản, mẫu chữ ký. Vậy thì Chris ký xác nhận lệnh chuyển tiền, tức giao dịch TXID3, thế nào? Làm sao để những người khác xác minh lệnh này do chính Chris đưa ra?
 
 Ở đây, ta cần chấp nhận tìm hiểu thêm một khái niệm mới có tính kỹ thuật một chút: đó là *"chìa khóa"* (*key*). Mà thực ra là 2 loại chìa: *chìa công khai* (*public key - PK*) và *chia riêng tư* (*secret/private key - SK*).
 
@@ -255,24 +255,24 @@ Với Bitcoin, mọi người không cần quan tâm ai là người tạo giao 
 
 Satoshi đưa ra ý tưởng như sau: với mỗi giao dịch chuyển tiền đi, người lập giao dịch sẽ lấy nội dung giao dịch, chạy nó qua thuật toán hash, rồi sử dụng SK của mình để mã hóa chuỗi hash, và sinh ra một mẩu dữ liệu, được gọi là chữ ký số (digital signature) của giao dịch. Thao tác sử dụng SK để mã hóa vừa nói chính là thao tác ký nhận dữ liệu (signing). Người lập giao dịch sẽ đính kèm chữ ký này vào dữ liệu giao dịch, và gửi lên mạng lưới. Như vậy, dữ liệu của một giao dịch mới sẽ gồm:
 
-1. Danh sách giao dịch đầu vào (TxID1, TxID2).
+1. Danh sách giao dịch đầu vào (TXID1, TXID2).
 2. Địa chỉ người nhận và số tiền cần chuyển (50 BTC cho Leon, và 40 cho Jill).
 3. Chữ ký số của Chris.
 
 Lưu ý là ở nội dung (2) trên đây, thay vì 2 cái tên Leon và Jill, thì Chris điền vào đó 2 PK, một là của Leon, và PK còn lại là của Jill. Vì sao anh ta lại biết PK của Leon và Jill? Là vì chính Leon và Jill đã cung cấp cho Chris. Trước khi chuyển tiền, Chris nhắn tin cho Leon và bảo *"Này Leon, anh sẽ chuyển cho chú 50 BTC, chú đưa anh cái địa chỉ ví của chú để anh vào lệnh"*, và Leon sẽ trả lời: *"OK Chris, anh chuyển vào ví có địa chỉ **1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2** nhé"*. Chuỗi ký tự rắc rối trong tin nhắn của Leon chính là địa chỉ ví của anh ta, và nó chính là PK của Leon. Tương tự, Jill sẽ chuyển cho Chris địa chỉ ví của mình, tức là PK của cô ấy. Như vậy, nội dung giao dịch của Chris chính xác là như sau:
 
-1. Danh sách giao dịch đầu vào (TxID1, TxID2).
+1. Danh sách giao dịch đầu vào (TXID1, TXID2).
 2. Địa chỉ ví (PK) của người nhận và số tiền cần chuyển.
 3. Chữ ký số của Chris.
 
-Toàn bộ nội dung trên sẽ được đưa lên mạng lưới để mọi người cùng biết. Bây giờ, để xác minh giao dịch TxID3 của Chris mới đưa lên, mỗi người trên mạng, ví dụ là Ada, sẽ làm như sau (xem lại [Phần 10](#Giao dịch và xác minh giao dịch)):
+Toàn bộ nội dung trên sẽ được đưa lên mạng lưới để mọi người cùng biết. Bây giờ, để xác minh giao dịch TXID3 của Chris mới đưa lên, mỗi người trên mạng, ví dụ là Ada, sẽ làm như sau (xem lại [Phần 10](#phần-10-giao-dịch-và-xác-minh-giao-dịch)):
 
-1. Xem lại nội dung các giao dịch đầu vào TxID1 và TxID2. Trong 2 giao dịch này có địa chỉ ví người nhận, đều là PKx. Nên nhớ rằng, các địa chỉ ví này là những chuỗi chữ số vô nghĩa, và không ai biết chúng gắn với ai. Vì vậy, tạm ký hiệu nó là PKx. Ada sẽ tạm ghi nhớ PKx này.
-2. Lấy nội dung TxID3, bỏ ra phần chữ ký số của nó, cho chạy qua thuật toán hash, ra được chuỗi hash H1.
-3. Bây giờ dùng chìa khóa PKx để giải mã chữ ký số của TxID3 ra được chuỗi hash H2.
+1. Xem lại nội dung các giao dịch đầu vào TXID1 và TXID2. Trong 2 giao dịch này có địa chỉ ví người nhận, đều là PKx. Nên nhớ rằng, các địa chỉ ví này là những chuỗi chữ số vô nghĩa, và không ai biết chúng gắn với ai. Vì vậy, tạm ký hiệu nó là PKx. Ada sẽ tạm ghi nhớ PKx này.
+2. Lấy nội dung TXID3, bỏ ra phần chữ ký số của nó, cho chạy qua thuật toán hash, ra được chuỗi hash H1.
+3. Bây giờ dùng chìa khóa PKx để giải mã chữ ký số của TXID3 ra được chuỗi hash H2.
 4. So sánh H1 và H2. 
 
-Nếu H1 và H2 bằng nhau, nghĩa là giao dịch TxID3 hợp lệ. *Điểm thú vị ở đây là Ada hoàn toàn không biết TxID3 do ai tạo ra*, nhưng cô ấy biết rằng người đó đúng là người đã ký giao dịch TxID3, và người này đúng là người được nhận tiền từ các giao dịch đầu vào TxID1 và TxID2. Như thế là đủ để Ada đồng ý rằng TxID3 là hợp lệ và sẽ đưa nó vào trong block mà cô ấy đang tạo lập.
+Nếu H1 và H2 bằng nhau, nghĩa là giao dịch TXID3 hợp lệ. *Điểm thú vị ở đây là Ada hoàn toàn không biết TXID3 do ai tạo ra*, nhưng cô ấy biết rằng người đó đúng là người đã ký giao dịch TXID3, và người này đúng là người được nhận tiền từ các giao dịch đầu vào TXID1 và TXID2. Như thế là đủ để Ada đồng ý rằng TXID3 là hợp lệ và sẽ đưa nó vào trong block mà cô ấy đang tạo lập.
 
 Như vậy, thay vì sử dụng thông tin định danh, trên mạng lưới Bitcoin, người ta sử dụng PK và SK, trong đó:
 
@@ -310,7 +310,62 @@ Do vậy, khi ta sử dụng ví Bitcoin (hoặc các loại ví tiền số kh�
 - *Quy trình xác minh không đơn giản là lấy PK từ giao dịch đầu vào để giải mã chữ ký của người gửi, mà là thực thi một đoạn mã lập trình trước được gắn với giao dịch.*
 - *Để đòi hỏi và sử dụng số tiền (UTXO) được gửi cho mình, ta cần phải sử dụng PK của ta để thực thi một đoạn mã lập trình trước được gắn với giao dịch chuyển tiền, gọi là đoạn mã mở khóa (unlock script).*
 
+## Phần 15: Branch, soft fork và hard fork
+
+Ở [Phần 8](#longest-chain), ta đã làm quen với hiện tượng phân nhánh của blockchain, khi một gần như đồng thời có hơn 1 node tìm ra block mới, và gửi các block mới này đến các node còn lại. Trở lại với ví dụ ở Phần 8 (trích dẫn):
+
+> Ví dụ, blockchain hiện là A-B-C-D-E, và trong khi đang tìm nonce cho block mới là F, thì Chris gần như đồng thời nhận được từ Leon và Jill 2 block mới hợp lệ (có nonce khác nhau, nhưng hash tổng vẫn thỏa mãn độ khó) gọi là F1 và F2. Chris sẽ dừng việc tìm F, chấp nhận sử dụng block F1 của Leon như block mới (dù nó chỉ đến trước Jill vài phần trăm giây), và lưu block F2 của Jill lại để dự phòng. Như vậy, trong tay Chris đang có 2 chain sau: "A-B-C-D-E-F1" (chain chính) và "A-B-C-D-E-F2" (chain dự phòng). Gộp lại ta có hình ảnh của một cành cây 2 nhánh, chia tách từ sau block E. Sau đó Chris tiếp tục tìm kiếm block mới (G) trên nhánh Leon. 
+
+Minh họa cho blockchain sau tình huống trên như sau:
+
+```
+          F1
+         /
+A-B-C-D-E
+         \
+          F2
+```
+
+Ở đây ta thấy blockchain từ 1 chuỗi thống nhất đã bị tách ra thành làm đôi, một chuỗi có block cuối là F1, chuỗi kia có block cuối là F2. Ta gọi chuỗi F1 và chuỗi F2 là các nhánh (branch) của blockchain.
+
+Tiếp theo, vẫn trích ví dụ ở Phần 8:
+
+> Tuy nhiên, vì lý do nào đó, Ada lại nhận được F2 của Jill trước F1 của Leon và bắt đầu tìm kiếm block G trên nhánh Jill, ngược lại so với Chris.
+>
+> Sau một thời gian, Ada là người đầu tiên tìm được block G. Cô ta gửi nó đến toàn bộ mạng lưới. Vì trong một khoảng thời gian đủ dài, chưa có ai tìm được block G ngoài Ada, nên tất cả đều chấp nhận block G do Ada tìm ra. Và vì Ada tìm ra block G trên nhánh Jill, nên giờ đây nhánh của Jill (A-B-C-D-E-F2-G) dài hơn so với nhánh của Leon (A-B-C-D-E-F1). Do đó, Chris buộc phải chuyển từ nhánh anh ta đang làm việc (nhánh Leon) sang nhánh của Jill. Cũng may, là Chris vẫn còn lưu giữ block F2 của Jill làm dự phòng, nên giờ đây anh ta có thể chuyển sang nhánh Jill một cách dễ dàng, và sau đó chỉ việc bổ sung thêm block G của Ada là xong.
+
+Tại thời điểm này, blockchain có hình ảnh như sau:
+```
+          F1
+         /
+A-B-C-D-E
+         \
+          F2-G
+```
+
+Như vậy là *chuỗi chính* (*main chain*, tức là *longest chain*) blockchain tiếp tục đi theo nhánh A-B-C-D-E-F2-G. Block F1 lúc này không được sử dụng, vì không nằm trên chuỗi chính, và gọi là uncle block.
+
+Việc hình thành các nhánh như trên diễn ra khá thường xuyên trong quá trình phát triển blockchain, vì đó là điều hết sức bình thường. Thực tế thì quá trình xử lý vấn đề hình thành nhánh và lựa chọn nhánh nào nằm trên chuỗi chính diễn ra rất nhanh, chỉ sau 1 block mà thôi. 
+
+Tuy nhiên, có những trường hợp việc rẽ nhánh này diễn ra lâu hơn (số lượng block trên nhánh nhiều hơn một vài block), thậm chí là vĩnh viễn không hợp nhất lại được. Người ta gọi chúng là các *fork*.
+
+Trong quá trình phát triển blockchain, sẽ có lúc đội ngũ phát triển thấy cần phải thay đổi một số quy tắc của nó, hoặc thực hiện một số sửa đổi trong mã chương trình (để cải tiến, sửa lỗi...). Nếu những sửa đổi này ảnh hưởng đến việc các node xử lý các giao dịch và các block, thì nó có nguy cơ gây ra các fork.
+
+Có 2 loại fork: *hard fork* và *soft fork*. Chúng khác nhau ra sao? Ta sẽ xem xét các ví dụ sau đây.
+
+Giả sử nhóm phát triển Bitcoin, vào một ngày đẹp giời, quyết định rằng cần phải nâng kích thước block từ 1 MByte lên 4 MByte, nhằm tăng tốc độ xử lý giao dịch của toàn hệ thống. Thay đổi này không tương thích với phiên bản hiện có, còn gọi là *không tương thích ngược* (*backward-incompatible*). Họ phát hành phiên bản cập nhật phần mềm dành cho các node để nâng giới hạn này bằng cách thay đổi cấu trúc của block. Tuy nhiên, vì lí do nào đó, không phải tất cả các node đều đồng ý với điều này, nên không phải tất cả các node đều nâng cấp. Sau đó, trên mạng lưới xuất hiện cả các block 1M (truyền thống) và block 4M (loại mới). Những node đã nâng cấp chỉ chấp nhận block 4M, trong khi những node không nâng cấp chỉ chấp nhận block 1M. Vì vậy, blockchain nhanh chóng bị tách ra thành 2 fork, 1 fork vẫn đi theo định dạng block 1M, còn 1 fork thì (kể từ điểm phân tách) chỉ chứa các block 4M. Chúng không bao giờ hợp nhất trở lại, và các node hoạt động duy trì song song cả 2 fork này. Trường hợp này được gọi là *hard fork*.
+
+Bên cạnh đó, cũng có những điều chỉnh trên phần mềm của blockchain mà vẫn duy trì tính *tương thích ngược* (*backward-compatible*) với các node chưa nâng cấp. Nghĩa là những node cũ này vẫn chấp nhận và làm việc được với các giao dịch và block kiểu mới, tuy rằng chúng sẽ không có được những thay đổi do phiên bản nâng cấp mang lại. Tuy nhiên, cần phải đảm bảo rằng số lượng node chấp nhận nâng cấp phải chiếm đa số ngay khi tung ra bản cập nhật. Như thế, sau thời điểm nâng cấp, chỉ có các block theo kiểu mới sẽ được duyệt đưa vào blockchain. Vì thế, sự kiện hard fork sẽ không xảy ra. Và ta gọi cách thức cập nhật điều chỉnh là *soft fork*. Gọi như vậy là để có sự so sánh với hard fork, là  cách thức điều chỉnh gây ra fork mới, chứ soft fork thực sự chẳng hề tạo ra một fork nào. *Để tiến hành một soft fork, cần có được sự đồng thuận của đa số các node trong mạng lưới blockchain*.
+
+Như vậy, có thể nói một cách giản lược như sau:
+
+- *Hard fork là sự kiện gây ra bởi những thay đổi trong phần mềm blockchain, mà không tương thích ngược với phiên bản trước đó, dẫn đến hình thành một nhánh mới hoạt động song song với nhánh chính và không bao giờ nhập lại với nhau.*
+- *Soft fork là sự kiện cập nhật phần mềm mà vẫn đảm bảo tương thích ngược với phiên bản trước đó, với số lượng node cập nhật chiếm đa số, và vì thế không tạo ra nhánh mới.*
+
+Ngoài ra, trong thực tế cũng có những dự án sinh ra những blockchain và tiền số mới bằng cách hard fork trên blockchain sẵn có của Bitcoin, như [Bitcoin Cash](https://bitcoincash.org/) (BCH), [Bitcoin Gold](https://bitcoingold.org/) (BTG), [Bitcoin SV](https://bitcoinsv.io/) (BSV).
+
 ## Nguồn tham khảo
+
 1. [Bitcoin Project](https://bitcoin.org)
 2. [Bitcoin Whitepaper](https://bitcoin.org/bitcoin.pdf)
 
