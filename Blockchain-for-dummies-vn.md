@@ -364,10 +364,50 @@ Như vậy, có thể nói một cách giản lược như sau:
 
 Ngoài ra, trong thực tế cũng có những dự án sinh ra những blockchain và tiền số mới bằng cách hard fork trên blockchain sẵn có của Bitcoin, như [Bitcoin Cash](https://bitcoincash.org/) (BCH), [Bitcoin Gold](https://bitcoingold.org/) (BTG), [Bitcoin SV](https://bitcoinsv.io/) (BSV).
 
+## Phần 16: Khái niệm Hợp đồng thông minh
+
+15 phần trước đã giới thiệu với chúng ta những khái niệm cơ bản về blockchain và đồng tiền số, hay tiền mã hóa, đầu tiên của thế giới ứng dụng blockchain, đó là Bitcoin. Những thông tin trong 15 phần đó cho phép chúng ta tìm hiểu xa hơn nữa về những ứng dụng cấp cao hơn của blockchain. Và trước hết, ta cần hiểu về khái niệm hợp đồng thông minh trên nền tảng blockchain, bởi nó là cơ sở của tất cả những ứng dụng tiếp theo.
+
+Vậy *hợp đồng thông minh* (*smart contract*) là gì?
+
+Thuật ngữ hợp đồng thông minh lần đầu tiên được đưa ra vào cuối những năm 1990, bởi một nhà khoa học máy tính, đồng thời là một luật sư, tên là Nick Szabo. Ông ấy rút gọn định nghĩa về nó như sau:
+
+> *Hợp đồng thông minh (HĐTM)* là một tập hợp các cam kết, được mô tả dưới dạng số hóa, bao gồm các nghi thức mà theo đó tất cả các bên tham gia cùng đồng ý sử dụng để thực hiện các cam kết đã đặt ra
+
+Hay nói một cách dễ hiểu hơn, một HĐTM là một *chương trình máy tính*, được viết ra và thực thi để thực hiện những điều khoản *đã được quy định trước* và đã được các bên sử dụng *đồng thuận*.
+
+Nick Szabo không chỉ đưa ra những đề xuất về hợp đồng thông minh, mà còn là người rất tích cực nghiên cứu và đưa ra các thiết kế về tiền mã hóa, về nền kinh tế phi tập trung. Thực tế, lĩnh vực mà ông nổi tiếng nhất là mã hóa, và vì nhiều điểm trùng hợp, rất nhiều người đã cho rằng ông chính là người đứng sau cha đẻ ẩn danh của Bitcoin: Satoshi Nakamoto. Tuy nhiên Nick Szabo đã liên tục phản đối điều này.
+
+Quay trở lại với khái niệm về HĐTM. Khi Nick Szabo đưa ra nó và tìm cách hiện thực hóa nó, thì thiết kế khá thi của blockchain vẫn chưa tồn tại, nên ông ấy vẫn chưa thành công trong việc ứng dụng khái niệm này vào thực tế. Vì sao lại như vậy?
+
+Theo Nick Szabo, nền tảng cơ sở cần có để HĐTM tồn tại, là mạng lưới bất tín (trustless network), trong đó, tất cả các bên tham gia đều không ai tin tưởng ai, nhưng vẫn cần cùng nhau đi đến thống nhất để thực hiện một HĐTM và công nhận kết quả mà nó tạo ra. Bởi vì theo ông ta, bất cứ niềm tin nào cũng là cơ sở của rủi ro, khi niềm tin đó bị xâm phạm, dù là vô tình hay hữu ý, thì toàn bộ ý nghĩa của một bản hợp đồng, vốn yêu cầu tính chặt chẽ và minh bạch, sẽ bị hủy hoại.
+
+Nghe không logic tí nào, phải không? Nếu không ai tin ai, thì làm thế nào lại đi đến đồng thuận được?
+
+Rất may, Satoshi đã giải quyết được vấn đề này khi đưa ra đặc tả BItcoin vào năm 2008 với cơ chế đồng thuận ngang hàng phi tập trung và chứng minh công việc (xem lại [Phần 5](#đồng-thuận-ngang-hàng-phi-tập-trung)).
+
+Ngay sau khi Bitcoin ra đời, rất nhiều người đã nhận ra ngay rằng, đã đến lúc HĐTM có thể được hiện thực hóa. Người ta nghĩ đến việc viết ra những chương trình máy tính và đặt chúng vào trong blockchain, sau đó bất kỳ ai cũng có thể xem xét và sử dụng chúng, sử dụng chính năng lực xử lý của mạng lưới để thực thi chúng. Nghe khá khó hiểu phải không? Ta sẽ xem xét kỹ hơn ngay sau đây.
+
+- Ta đã biết rằng, dữ liệu chủ yếu ở trong blockchain là các giao dịch. Chúng là những chỉ thị cho biết mạng lưới cần chuyển từ ai đến ai một số tiền là bao nhiêu. Và vì những chỉ thị này được các node trên mạng lưới, tức là các phần mềm của blockchain, thực thi, nên về bản chất, chẳng phải chúng chính là những chỉ thị máy tính, hay hiểu một cách khác, là một dạng chương trình máy tính, dù rất đơn giản, hay sao?
+- Nếu ta mở rộng dữ liệu của một giao dịch, cho phép đưa vào đó các mã lệnh phức tạp hơn, cho phép chúng chỉ thị mạng lưới blockchain thực hiện các nhiệm vụ cao cấp hơn, thì chẳng phải là chúng ta đã có trong tay một công cụ số hóa các HĐTM hay sao?
+- Ta thấy rằng, HĐTM đòi hỏi một mạng lưới bất tín nhằm đạt được tính minh bạch và khách quan tối đa. Thì đây, một blockchain như Bitcoin đáp ứng hoàn toàn đầy đủ những yêu cầu đó (xem lại các Phần từ 5 đến 11). Mã thực thi của các HĐTM được đưa lên blockchain theo cùng cơ chế xác minh như với các giao dịch, và thừa hưởng những đặc trưng quan trọng của chúng:
+  - Minh bạch và công khai: ai cũng có thể xem toàn bộ thông tin và mã của HĐTM, ai cũng có thể sử dụng chúng.
+  - Toàn vẹn: một HĐTM sau khi đã đưa vào blockchain thì không thể bị kẻ xấu nào đó sửa đổi. 
+  - Công bằng: một HĐTM, để được đưa vào blockchain, phải được số đông trong mạng lưới blockchain chấp nhận.
+
+Như vậy, sự ra đời của Bitcoin đã tạo điều kiện để người ta nhìn thấy khả năng ứng dụng HĐTM vào trong blockchain. Tuy nhiên, Bitcoin lại không phải là một nền tảng phù hợp để HĐTM phát triển, mà phải đợt đến khi Ethereum, một nền tảng blockchain khác ra đời, thì các ứng dụng HĐTM mới bùng nổ. Vì sao lại như vậy?
+
+Bitcoin cũng có một thứ ngôn ngữ lập trình cho phép tạo ra các chỉ thị máy tính nhúng vào các giao dịch, để mạng lưới cũng xác minh và thực thi. Ngôn ngữ này được gọi là Bitcoin Script. Tuy nhiên, nhóm phát triển Bitcoin, do những lo ngại rất có lý, đã thiết kế Bitcoin Script một cách giới hạn, mà thuật ngữ gọi là Turing Incomplete. Hiểu một cách đơn giản, nghĩa là ngôn ngữ lập trình này không được trang bị đủ, hoặc là bị giới hạn, để có thể giải quyết mọi bài toán đặt ra.
+
+Trong khi đó, nền tảng blockchain và tiền mã hóa lớn thứ hai thế giới, Ethereum, lại lựa chọn định hướng phát huy tối đa khả năng ứng dụng HĐTM, bằng cách đưa ra ngôn ngữ lập trình Solidity, là một ngôn ngữ đáp ứng Turing Complete, tức là nó có thể được viết để giải quyết mọi bài toán tin học. Chính vì thế, sau khi Ethereum ra đời, thế giới lập tức bùng nổ các nghiên cứu và ứng dụng HĐTM, tạo nên cơn sốt các ứng dụng phi tập trung.
+
+Vì vậy, các phần tiếp theo của cuốn sách này, sẽ dựa chủ yếu trên thiết kế HĐTM cũng như các ứng dụng liên quan dựa trên nền tảng blockchain [Ethereum](https://ethereum.org).
+
 ## Nguồn tham khảo
 
 1. [Bitcoin Project](https://bitcoin.org)
 2. [Bitcoin Whitepaper](https://bitcoin.org/bitcoin.pdf)
+3. [Ethereum Organization](https://ethereum.org)
 
 
 
