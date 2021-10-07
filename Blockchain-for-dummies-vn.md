@@ -253,7 +253,7 @@ Trở lại với bài toán xác minh lệnh chuyển tiền. Chris hoàn toàn
 
 Với Bitcoin, mọi người không cần quan tâm ai là người tạo giao dịch, ai là người nhận. Như thế mới đảm bảo tính vô danh của mạng lưới. Nhưng việc xác minh giao dịch hợp lệ vẫn phải được tiến hành. Vậy giải quyết vấn đề này ra sao? 
 
-Satoshi đưa ra ý tưởng như sau: với mỗi giao dịch chuyển tiền đi, người lập giao dịch sẽ lấy nội dung giao dịch, chạy nó qua thuật toán hash, rồi sử dụng SK của mình để mã hóa chuỗi hash, và sinh ra một mẩu dữ liệu, được gọi là chữ ký số (digital signature) của giao dịch. Thao tác sử dụng SK để mã hóa vừa nói chính là thao tác ký nhận dữ liệu (signing). Người lập giao dịch sẽ đính kèm chữ ký này vào dữ liệu giao dịch, và gửi lên mạng lưới. Như vậy, dữ liệu của một giao dịch mới sẽ gồm:
+Satoshi đưa ra ý tưởng như sau: với mỗi giao dịch chuyển tiền đi, người lập giao dịch sẽ lấy nội dung giao dịch, chạy nó qua thuật toán hash, rồi sử dụng SK của mình để mã hóa chuỗi hash, và sinh ra một mẩu dữ liệu, được gọi là *chữ ký số* (*digital signature*) của giao dịch. Thao tác sử dụng SK để mã hóa vừa nói chính là thao tác ký nhận dữ liệu (signing). Người lập giao dịch sẽ đính kèm chữ ký này vào dữ liệu giao dịch, và gửi lên mạng lưới. Như vậy, dữ liệu của một giao dịch mới sẽ gồm:
 
 1. Danh sách giao dịch đầu vào (TXID1, TXID2).
 2. Địa chỉ người nhận và số tiền cần chuyển (50 BTC cho Leon, và 40 cho Jill).
@@ -273,6 +273,12 @@ Toàn bộ nội dung trên sẽ được đưa lên mạng lưới để mọi 
 4. So sánh H1 và H2. 
 
 Nếu H1 và H2 bằng nhau, nghĩa là giao dịch TXID3 hợp lệ. *Điểm thú vị ở đây là Ada hoàn toàn không biết TXID3 do ai tạo ra*, nhưng cô ấy biết rằng người đó đúng là người đã ký giao dịch TXID3, và người này đúng là người được nhận tiền từ các giao dịch đầu vào TXID1 và TXID2. Như thế là đủ để Ada đồng ý rằng TXID3 là hợp lệ và sẽ đưa nó vào trong block mà cô ấy đang tạo lập.
+
+Bây giờ, thử đánh giá lại phương pháp xác minh trên bằng cách giả định rằng Bill muốn giả mạo một giao dịch để chuyển tiền từ ví của Chris sang cho Bob, là tên em họ của hắn. Bill làm thế nào? Hắn sẽ tìm trên blockchain 2 giao dịch TXID1 và TXID2, không có gì khó, vì mọi thông tin trên blockchain là công khai. Sau đó hắn đưa địa chỉ nhận là ví của Bob vào thông tin giao dịch, rồi cuối cùng là ký nhận giao dịch rồi gửi lên mạng lưới. *Vấn đề là Bill không có SK của Chris, hắn phải sử dụng SK của chính hắn*.
+
+Khi Ada nhận được giao dịch giả mạo này, cô ấy sẽ làm các bước như vừa trình bày ở trên. Nhưng cô sẽ thấy lỗi ngay ở bước 3, vì PK lấy ra từ các giao dịch TXID1 và TXID2 là của Chris, nên nó không thể giải mã được chữ ký số của TXID3 (do Bill tạo ra). Vì thế Ada biết rằng giao dịch này là giả mạo, và sẽ thông báo cho mọi người cùng biết.
+
+Thế nếu Bill dùng các giao dịch đầu vào có PK là địa chỉ ví của hắn thì sao? OK thôi, vì như thế có nghĩa là hắn đang tạo một giao dịch sử dụng tiền của chính hắn, tức là hết sức bình thường.
 
 Như vậy, thay vì sử dụng thông tin định danh, trên mạng lưới Bitcoin, người ta sử dụng PK và SK, trong đó:
 
