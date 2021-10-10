@@ -1,4 +1,4 @@
-# Blockchain & Bitcoin cho phó thường dân
+# Blockchain cho nhân dân
 
 ![Bitcoin](assets/title-vn.jpg)
 
