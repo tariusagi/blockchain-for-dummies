@@ -1,2 +1,2 @@
 # Blockchain for Dummies
-Read the Vietnamese version [here](Blockchain-for-dummies-vn.md).
+*(Vietnamese)* Mời đọc bản tiếng Việt tại [đây](Blockchain-for-dummies-vn.md).
