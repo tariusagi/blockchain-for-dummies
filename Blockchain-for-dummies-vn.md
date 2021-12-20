@@ -14,7 +14,7 @@ Các thông tin tham khảo phần lớn sẽ đến từ đồng tiền số đ
 
 ## Phần 1: Blockchain là gì?
 
-Một *blockchain* là một chuỗi (*chain*) kết nối các khối (*block*) dữ liệu với nhau theo nguyên tắc: block sau phải chứa *chuỗi hash* của block trước nó, và cứ như thế cho đến tận block đầu tiên (block zero).
+Một *blockchain* là một chuỗi (*chain*) kết nối các khối (*block*) dữ liệu với nhau theo nguyên tắc: block sau phải chứa *chuỗi hash* của block trước nó, và cứ như thế cho đến tận block đầu tiên (block zero/genesis block).
 
 Vậy chuỗi hash là gì? Người ta nghĩ ra một thuật toán, gọi là *thuật toán băm* (*hash algorithm*), mà khi đưa vào đó một khối dữ liệu bất kỳ, sẽ cho ra kết quả là một chuỗi ký tự có độ dài cố định, ngắn hơn rất nhiều so với khối dữ liệu đầu vào, được gọi là *hash digest*, hay đơn giản là *hash*. Và quan trọng nhất, đó là chỉ cần một thay đổi nhỏ nhất ở dữ liệu đầu vào, thì hash đầu ra sẽ thay đổi hoàn toàn. Không thể có 2 khối dữ liệu đầu vào khác nhau, dù chỉ 1 bit, mà lại sinh ra 2 hash giống nhau. Vì thế, hash có vai trò như một chữ ký đại diện cho dữ liệu đầu vào.
 
