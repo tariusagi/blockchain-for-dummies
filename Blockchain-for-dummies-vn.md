@@ -133,6 +133,7 @@ Ada:
 Chris:                                      |
   Nhánh chính:    A-B-C-D-E-F1(Leon) bị hủy |
   Nhánh dự phòng:          \F2(Jill)-G<-----+ 
+Chuỗi chính thức: A-B-C-D-E-F2(Jill)-G
 ```
 
 Đến đây, ta đã đi qua những phần cơ bản nhất của blockchain. Ở phần tiếp theo, ta sẽ bàn thêm về ý nghĩa các giải pháp mà Satoshi đem lại cho Bitcoin.
