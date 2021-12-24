@@ -10,13 +10,15 @@ Blockchain là một khái niệm không còn mới với dân công nghệ, nh�
 
 Như một nỗ lực trong việc tự đánh giá lại khả năng hiểu biết của bản thân trong quá trình nghiên cứu về blockchain và các ứng dụng của nó, tôi sẽ cố gắng viết lại theo cách *dễ hiểu nhất* có thể, những gì mình thu lượm được về lĩnh vực này. Các bài viết sẽ được đăng thành nhiều phần, song hành với quá trình nghiên cứu của tôi, như một dạng kết quả được đúc rút lại, trong những comment bên trong post này.
 
-Các thông tin tham khảo phần lớn sẽ đến từ đồng tiền số đầu tiên ứng dụng blockchain: [Bitcoin](https://bitcoin.org). 
+Các thông tin tham khảo phần lớn sẽ đến từ đồng tiền số đầu tiên ứng dụng blockchain: [Bitcoin](https://bitcoin.org).
 
 ## Phần 1: Blockchain là gì?
 
 Một *blockchain* là một chuỗi (*chain*) kết nối các khối (*block*) dữ liệu với nhau theo nguyên tắc: block sau phải chứa *chuỗi hash* của block trước nó, và cứ như thế cho đến tận block đầu tiên (block zero/genesis block).
 
 Vậy chuỗi hash là gì? Người ta nghĩ ra một thuật toán, gọi là *thuật toán băm* (*hash algorithm*), mà khi đưa vào đó một khối dữ liệu bất kỳ, sẽ cho ra kết quả là một chuỗi ký tự có độ dài cố định, ngắn hơn rất nhiều so với khối dữ liệu đầu vào, được gọi là *hash digest*, hay đơn giản là *hash*. Và quan trọng nhất, đó là chỉ cần một thay đổi nhỏ nhất ở dữ liệu đầu vào, thì hash đầu ra sẽ thay đổi hoàn toàn. Không thể có 2 khối dữ liệu đầu vào khác nhau, dù chỉ 1 bit, mà lại sinh ra 2 hash giống nhau. Vì thế, hash có vai trò như một chữ ký đại diện cho dữ liệu đầu vào.
+
+Để cho vui, bạn đọc có thể vào trang [SHA256 trên GitHub](https://emn178.github.io/online-tools/sha256.html) để trải nghiệm thuật toán băm SHA256 này.
 
 Phần tiếp theo sẽ giải thích vì sao blockchain yêu cầu mỗi block phải chứa hash của block trước nó.
 
@@ -26,7 +28,7 @@ Là để đảm bảo tính toàn vẹn (*integrity*) về dữ liệu của to
 
 Khi ta nhận được một blockchain, ta nên kiểm tra xem liệu dữ liệu của nó có bị sai lệch hay không. Trong thực tế có rất nhiều khả năng dẫn đến sai lệch dữ liệu: lỗi đường truyền, lỗi ổ cứng, dính virus, bị cố tình sửa đổi...
 
-Vậy làm thế nào để kiểm tra sự toàn vẹn của blockchain? Rất đơn giản: giả sử blockchain có độ dài N blocks, ta sẽ lấy dữ liệu của block N-1 đưa vào thuật toán hash để tạo ra chuỗi hash của nó, rồi so sánh với giá trị chuỗi hash đang được lưu trữ ở block N. Nếu bằng nhau, nghĩa là blockchain đang OK với 2 block N và N-1. Tiếp tục làm như vậy cho đến block zero. Nếu mọi phép so sánh đều cho kết quả bằng nhau, ta sẽ yên tâm rằng dữ liệu của blockchain này là toàn vẹn. Nếu chỉ cần xuất hiện một kết quả khác nhau, ta sẽ kết luận ngay blockchain này không còn toàn vẹn.
+Vậy làm thế nào để kiểm tra sự toàn vẹn của blockchain? Rất đơn giản: giả sử blockchain có độ dài N blocks, ta sẽ lấy dữ liệu của block N-1 đưa vào thuật toán hash để tạo ra chuỗi hash của nó, rồi so sánh với giá trị chuỗi hash đang được lưu trữ ở block N. Nếu bằng nhau, nghĩa là blockchain đang OK với 2 block N và N-1. Tiếp tục làm như vậy cho đến block zero. Nếu mọi phép so sánh đều cho kết quả bằng nhau, ta sẽ yên tâm rằng dữ liệu của blockchain này là toàn vẹn với các block từ 0 đến N-1 (*bên cạnh đó còn có cách để kiểm tra tính toàn vẹn của chính block cuối cùng, nhưng ta không đi sâu vào nó*). Nếu chỉ cần xuất hiện một kết quả khác nhau, ta sẽ kết luận ngay blockchain này không còn toàn vẹn.
 
 Tuy nhiên thiết kế này chỉ đưa ra cách kiểm tra tính toàn vẹn của blockchain, chứ chưa đảm bảo *tính đúng đắn* (*validity*) của nó. Đây là nội dung của phần tiếp theo.
 
@@ -34,7 +36,11 @@ Tuy nhiên thiết kế này chỉ đưa ra cách kiểm tra tính toàn vẹn c
 
 *Đây là một chủ đề dài, và sẽ cần nhiều phần.*
 
-Một blockchain toàn vẹn không có nghĩa là nó đúng đắn. Một kẻ rành công nghệ có thể tạo ra một blockchain toàn vẹn về dữ liệu, nhưng trong đó chứa đựng những dữ liệu sai khác với thực tế và có lợi cho hắn. Việc này rất dễ dàng: giả sử blockchain hiện có độ dài là 5, gồm các block A-B-C-D-E. Bill, là một kẻ xấu xa, cần sửa đổi dữ liệu ở block C, hắn ta sẽ làm việc đó, rồi tính toán lại hash của block C, đưa hash này vào block D, tiếp tục tính hash của block D, đưa vào block E. Và thế là xong. Hắn đã tạo ra một blockchain toàn vẹn về dữ liệu, nhưng chứa dữ liệu lừa đảo có mục đích, rồi tung ra cho mọi người cùng xem. Như thế, giờ đây tồn tại 2 blockchain, và chúng chỉ giống nhau từ block B về trước, còn từ block C thì khác nhau. Vậy làm thế nào để biết blockchain nào là đúng đắn (valid)?
+Một blockchain toàn vẹn không có nghĩa là nó đúng đắn. Một kẻ rành công nghệ có thể tạo ra một blockchain toàn vẹn về dữ liệu, nhưng trong đó chứa đựng những dữ liệu sai khác với thực tế và có lợi cho hắn. Việc này rất dễ dàng: giả sử blockchain hiện có độ dài là 5, gồm các block A-B-C-D-E. Bill, là một kẻ xấu xa, cần sửa đổi dữ liệu ở block C (thành C'), hắn ta sẽ làm việc đó, rồi tính toán lại hash của block C', đưa hash này vào block D (thành D'), tiếp tục tính hash của block D', đưa vào block E (thành E'). Và thế là xong. Hắn đã tạo ra một blockchain toàn vẹn về dữ liệu, nhưng chứa dữ liệu lừa đảo có mục đích, rồi tung ra cho mọi người cùng xem. Như thế, giờ đây tồn tại 2 blockchain, và chúng chỉ giống nhau từ block B về trước, còn từ block C thì khác nhau. Vậy làm thế nào để biết blockchain nào là đúng đắn (valid)?
+
+```txt
+A-B-C-D-E hay A-B-C'-D'-E' là đúng?
+```
 
 Có một cách rất dễ dàng: chúng ta bầu ra một người, có tên là Peter, đứng ra xác định blockchain nào là đúng đắn. Peter là một anh chàng đàng hoàng, có uy tín, có tiếng là trung thực, vì thế đa số đều tin vào anh ta. Thế nhưng, nhỡ đâu Peter lại mắc sai sót? Hoặc thậm chí, anh ta thông đồng với Bill, và xác nhận blockchain của Bill là đúng?
 
@@ -80,7 +86,7 @@ Phần tiếp theo sẽ đi sâu hơn vào nội dung kỹ thuật của PoW.
 
 ## Phần 7: PoW và độ khó của blockchain
 
-*Phần này có thể bỏ qua nếu bạn không quá quan tâm đến khía cạnh kỹ thuật của cơ chế PoW*
+Lưu ý: Phần này có thể bỏ qua nếu bạn không quá quan tâm đến khía cạnh kỹ thuật của cơ chế PoW.
 
 Ngay tại Phần 1, ta đã biết rằng một block cần phải chứa hash của block trước nó. Thuật toán hash mà Satoshi đưa ra với Bitcoin là SHA-256, nó tạo ra một hash 256 byte từ dữ liệu đầu vào. Thuật toán SHA-256 chạy rất nhanh, một máy tính cá nhân thời nay chỉ mất 1 giây để mã hóa hơn 3 Gigabyte dữ liệu với thuật toán này, trong khi đó kích thước block phiên bản đầu tiên của Bitcoin chỉ là 1 MB. Nghĩa là chỉ mất 0,0003 giây để tính hash của 1 block.
 
@@ -104,9 +110,30 @@ Khi một node tạo ra một block hợp lệ, nó sẽ thông báo cho tất c
 
 Ví dụ, blockchain hiện là A-B-C-D-E, và trong khi đang tìm nonce cho block mới là F, thì Chris gần như đồng thời nhận được từ Leon và Jill 2 block mới hợp lệ (có nonce khác nhau, nhưng hash tổng vẫn thỏa mãn độ khó) gọi là F1 và F2. Chris sẽ dừng việc tìm F, chấp nhận sử dụng block F1 của Leon như block mới (dù nó chỉ đến trước Jill vài phần trăm giây), và lưu block F2 của Jill lại để dự phòng. Như vậy, trong tay Chris đang có 2 chain sau: "A-B-C-D-E-F1" (chain chính) và "A-B-C-D-E-F2" (chain dự phòng). Gộp lại ta có hình ảnh của một cành cây 2 nhánh, chia tách từ sau block E. Sau đó Chris tiếp tục tìm kiếm block mới (G) trên nhánh Leon.
 
+```txt
+Chris:
+  Nhánh chính:    A-B-C-D-E-F1(Leon)
+  Nhánh dự phòng:          \F2(Jill)
+```
+
 Tuy nhiên, vì lý do nào đó, Ada lại nhận được F2 của Jill trước F1 của Leon và bắt đầu tìm kiếm block G trên nhánh Jill, ngược lại so với Chris.
 
+```txt
+Ada:
+  Nhánh chính:    A-B-C-D-E-F2(Jill)
+  Nhánh dự phòng:          \F1(Leon)
+```
+
 Sau một thời gian, Ada là người đầu tiên tìm được block G. Cô ta gửi nó đến toàn bộ mạng lưới. Vì trong một khoảng thời gian đủ dài, chưa có ai tìm được block G ngoài Ada, nên tất cả đều chấp nhận block G do Ada tìm ra. Và vì Ada tìm ra block G trên nhánh Jill, nên giờ đây nhánh của Jill (A-B-C-D-E-F2-G) dài hơn so với nhánh của Leon (A-B-C-D-E-F1). Do đó, Chris buộc phải chuyển từ nhánh anh ta đang làm việc (nhánh Leon) sang nhánh của Jill. Cũng may, là Chris vẫn còn lưu giữ block F2 của Jill làm dự phòng, nên giờ đây anh ta có thể chuyển sang nhánh Jill một cách dễ dàng, và sau đó chỉ việc bổ sung thêm block G của Ada là xong.
+
+```txt
+Ada:
+  Nhánh chính:    A-B-C-D-E-F2(Jill)-G------+
+  Nhánh dự phòng:          \F1(Leon) bị hủy |
+Chris:                                      |
+  Nhánh chính:    A-B-C-D-E-F1(Leon)-G<-----+
+  Nhánh dự phòng:          \F2(Jill) bị hủy
+```
 
 Đến đây, ta đã đi qua những phần cơ bản nhất của blockchain. Ở phần tiếp theo, ta sẽ bàn thêm về ý nghĩa các giải pháp mà Satoshi đem lại cho Bitcoin.
 
@@ -126,11 +153,11 @@ Ví và giao dịch Bitcoin sẽ được làm rõ hơn ở các phần tiếp t
 
 ## Phần 10: Giao dịch và xác minh giao dịch
 
-*Đây là một trong những phần có thể nói là khó hiểu và quan trọng nhất khi tìm hiểu cách thức hoạt động của Bitcoin.*
+Lưu ý: Đây là một trong những phần có thể nói là khó hiểu và quan trọng nhất khi tìm hiểu cách thức hoạt động của Bitcoin.
 
 Trước hết, cần phải hiểu cách mà Bitcoin xác minh và thực hiện các giao dịch gửi tiền (bitcoin) đến cho ta cũng như các giao dịch mà ta chuyển tiền cho người khác.
 
-Giả sử Chris cần chuyển cho Leon 50 BTC và cho Jill 40 BTC. Anh ta sẽ nói với mọi người thế nào? Có phải là: *"Này mọi người, tôi sẽ chuyển 50 cho Leon, và 40 cho Jill"*? OK được thôi. Vấn đề là, *Chris có đủ tiền để chuyển đi số tiền trên hay không*?
+Giả sử Chris cần chuyển cho Leon 90 BTC. Anh ta sẽ nói với mọi người thế nào? Có phải là: *"Này mọi người, tôi sẽ chuyển 90 BTC cho Leon"*? OK được thôi. Vấn đề là, *Chris có đủ tiền để chuyển cho Leon số tiền trên hay không*?
 
 Thông thường, khi có phát sinh giao dịch gửi hay nhận tiền, các hệ thống kế toán sẽ ghi nhận giao dịch, tính toán *số dư* (*balance*), rồi lưu số dư này lại để tính toán cho các giao dịch tiếp theo. Không nhất thiết phải tính toán và ghi nhận số dư sau mỗi giao dịch, nhưng thường việc này sẽ được thực hiện theo kỳ, ví dụ cuối ngày hay cuối tháng. Lý do của cách làm này, là để tăng tốc độ xử lý giao dịch. Thay vì phải cộng trừ tất cả các giao dịch từ đầu của cả hệ thống cho đến trước giao dịch cần thực hiện, để xem số dư còn đáp ứng hay không, thì hệ thống chỉ cần làm thế với các giao dịch từ đầu kỳ. Dù sao, tính toán số lượng giao dịch của một vài ngày vẫn nhanh hơn là vài năm, phải không?
 
@@ -138,11 +165,11 @@ Tuy nhiên, phương pháp trên tiềm ẩn rủi ro rất lớn. Chris có th�
 
 Với tầm nhìn về một hệ thống xử lý giao dịch công khai theo mô hình mạng phân tán ngang hàng có quy mô toàn cầu, Bitcoin cần phải được thiết kế sao cho rủi ro bị tấn công, sửa đổi là thấp nhất. Vì thế, trong Bitcoin, chẳng có cái gì gọi là số dư cả.
 
-Vậy nếu Chris muốn chuyển 50 BTC cho Leon và 40 BTC cho Jill, thì anh ta làm thế nào để thuyết phục mọi người là anh ta có đủ ít nhất 90 BTC để thực hiện 2 giao dịch trên? Vì nếu anh ta không chứng minh được rằng anh ta đang có ít nhất 90 BTC trong tay, thì mạng lưới Bitcoin, tức là những người khác: Leon, Jill, Ada, Claire, Artyom..., sẽ không chấp nhận 2 giao dịch mà anh ta đang muốn tiến hành.
+Vậy nếu Chris muốn chuyển 90 BTC cho Leon, thì anh ta làm thế nào để thuyết phục mọi người là anh ta đang có đủ ít nhất 90 BTC để thực hiện giao dịch này? Vì nếu anh ta không chứng minh được rằng anh ta đang có ít nhất 90 BTC trong tay, thì mạng lưới Bitcoin, tức là những người khác: Leon, Jill, Ada, Claire, Artyom..., sẽ không chấp nhận giao dịch mà anh ta đang muốn tiến hành.
 
 *Trong Bitcoin blockchain, mọi giao dịch đều được định danh bởi một chuỗi mã số, gọi là mã số định danh giao dịch (Transaction's Identification - TXID). Ta sẽ nói một cách ngắn gọn là mã giao dịch. Khi một giao dịch được chấp nhận vào ghi vào blockchain, thì cả dữ liệu của giao dịch lẫn mã giao dịch của nó đều được lưu giữ.*
 
-Và đây là cách mà Chris làm để thuyết phục mọi người rằng anh ta có đủ tiền để thực hiện 2 giao dịch mong muốn. Anh ta cung cấp cho mọi người một danh sách các mã số giao dịch trước đó (đã được ghi trên blockchain), trong đó Chris là người được nhận tiền. Ví dụ, Chris bảo: *"Này mọi người, trước đây Ada và Artyom đã chuyển cho tôi một số tiền, mã giao dịch của chúng là TXID1 và TXID2, và bây giờ, tôi sẽ chuyển cho Leon 50 BTC, và chuyển cho Jill 40 BTC"*. Những giao dịch mà Chris liệt kê trong đó anh ta là người nhận tiền, được gọi là các *giao dịch đầu vào* (*input transaction*s), ở đây là *TXID1* và *TXID2*. Mọi người sẽ rà soát trên blockchain để tìm kiếm 2 giao dịch có mã số *TXID1* và *TXID2*, sau đó kiểm tra nội dung các giao dịch này, mục đích là để trả lời các câu hỏi sau:
+Và đây là cách mà Chris làm để thuyết phục mọi người rằng anh ta có đủ tiền để thực hiện giao dịch mong muốn. Anh ta cung cấp cho mọi người một danh sách các mã số giao dịch trước đó (đã được ghi trên blockchain), trong đó Chris là người được nhận tiền. Ví dụ, Chris bảo: *"Này mọi người, trước đây Ada và Artyom đã chuyển cho tôi một số tiền, mã giao dịch của chúng là `TXID1` và `TXID2`, và bây giờ, tôi sẽ chuyển cho Leon 90 BTC"*. Những giao dịch mà Chris liệt kê trong đó anh ta là người nhận tiền, được gọi là các *giao dịch đầu vào* (*input transaction*s), ở đây là `TXID1` và `TXID2`. Mọi người sẽ rà soát trên blockchain để tìm kiếm 2 giao dịch có mã số `TXID1` và `TXID2`, sau đó kiểm tra nội dung các giao dịch này, mục đích là để trả lời các câu hỏi sau:
 
 1. Các giao dịch đầu vào này có tồn tại trên blockchain không?
 2. Các giao dịch trên có đúng là chuyển tiền cho Chris không?
@@ -151,7 +178,7 @@ Và đây là cách mà Chris làm để thuyết phục mọi người rằng a
 
 Nếu tất cả các câu trả lời là đúng, thì giao dịch của Chris sẽ được *chấp nhận* (*verified*) và sẽ được ghi vào blockchain.
 
-Ở đây ta thấy rằng để kiểm tra một giao dịch mới, mọi người phải rà soát toàn bộ các transactions trong cả blockchain. Tại thời điểm viết bài này, tổng số giao dịch của Bitcoin đã lên tới gần 680 triệu, và trung bình có tới hơn 260 nghìn giao dịch mới mỗi ngày. Như vậy, việc xác minh giao dịch hẳn nhiên phải trở nên rất chậm chạp và hạn chế khả năng mở rộng của Bitcoin. 
+Ở đây ta thấy rằng để kiểm tra một giao dịch mới, mọi người phải rà soát toàn bộ các transactions trong cả blockchain. Tại thời điểm viết bài này, tổng số giao dịch của Bitcoin đã lên tới gần 680 triệu, và trung bình có tới hơn 260 nghìn giao dịch mới mỗi ngày. Như vậy, việc xác minh giao dịch hẳn nhiên phải trở nên rất chậm chạp và hạn chế khả năng mở rộng của Bitcoin.
 
 Phải có cách nào đó tốt hơn để khắc phục vấn đề này. Giải pháp đó sẽ được trình bày ở phần tiếp theo.
 
@@ -159,13 +186,13 @@ Phải có cách nào đó tốt hơn để khắc phục vấn đề này. Gi�
 
 Ở cuối phần trước, ta đã đặt ra vấn đề làm thế nào để giảm tải cho việc xác minh các giao dịch, khi mỗi người đều phải rà soát gần như toàn bộ các giao dịch đã có trên blockchain để xác minh một giao dịch mới.
 
-Trở lại với ví dụ của chúng ta. Mọi người đều đã xác nhận giao dịch của Chris là OK và giao dịch này sẽ được ghi vào blockchain. Ta đã biết rằng giao dịch này liệt kê 2 giao dịch đầu vào là TXID1 và TXID2, và ta đặt cho giao dịch mới được ghi nhận của Chris là TXID3. Tại thời điểm này, rõ ràng là vai trò cung cấp dòng tiền vào của TXID1 và TXID2 đã hết, vì toàn bộ số BTC của 2 giao dịch này đã đi vào giao dịch TXID3 do Chris mới tạo ra. Với Bitcoin, chúng được coi là những *"giao dịch đã được sử dụng"* (*spent transaction*). Theo nguyên tắc của Bitcoin, *một giao dịch chỉ có thể được sử dụng một lần duy nhất*. Trong trường hợp khi TXID3 của Chris được chấp thuận, thì TXID1 và TXID2 đều đã được sử dụng, và không giao dịch nào khác được sử dụng chúng làm giao dịch đầu vào nữa. Và vì thế, không ai còn quan tâm đến 2 giao dịch này nữa. Tất cả sẽ bỏ qua 2 giao dịch có mã số TXID1 và TXID2 trong khi rà soát trên blockchain. Bằng cách đó, Bitcoin giảm đáng kể số lượng giao dịch cần rà soát khi xác minh một giao dịch mới.
+Trở lại với ví dụ của chúng ta. Mọi người đều đã xác nhận giao dịch của Chris là OK và giao dịch này sẽ được ghi vào blockchain. Ta đã biết rằng giao dịch này liệt kê 2 giao dịch đầu vào là `TXID1` và `TXID2`, và ta đặt cho giao dịch mới cần được ghi nhận của Chris là `TXID3` (chuyển cho Leon). Tại thời điểm này, rõ ràng là vai trò cung cấp dòng tiền vào của `TXID1` và `TXID2` đã hết, vì toàn bộ số BTC của 2 giao dịch này đã đi vào giao dịch `TXID3`. Với Bitcoin, chúng được coi là những *"giao dịch đã được sử dụng"* (*spent transaction*). Theo nguyên tắc của Bitcoin, *một giao dịch chỉ có thể được sử dụng một lần duy nhất*. Trong trường hợp khi `TXID3` của Chris được chấp thuận, thì `TXID1` và `TXID2` đều đã được sử dụng, và không giao dịch nào khác được sử dụng chúng làm giao dịch đầu vào nữa. Và vì thế, không ai còn quan tâm đến 2 giao dịch này nữa. Tất cả sẽ bỏ qua 2 giao dịch có mã số `TXID1` và `TXID2` trong khi rà soát trên blockchain. Bằng cách đó, Bitcoin giảm đáng kể số lượng giao dịch cần rà soát khi xác minh một giao dịch mới.
 
 Nhưng việc cải tiến chưa dừng lại ở đó!
 
-Ở trên, ta biết rằng TXID1 và TXID2 đã được sử dụng, và chẳng ai cần đến chúng nữa trong quá trình xác minh giao dịch đầu vào. Tiếp tục với ví dụ của chúng ta: TXID3 là mã giao dịch của Chris, trong đó TXID1 và TXID2 là 2 giao dịch đầu vào, cung cấp dòng tiền vào cho Chris để anh ta yêu cầu 2 giao dịch mới để chuyển tiền cho Leon và Jill. Hãy tạm gọi 2 giao dịch này là TXID4 và TXID5. Tại thời điểm TXID3 được ghi nhận vào blockchain, TXID4 chứa 50 BTC, còn TXID5 chứa 40 BTC. Số tiền này đều chưa được ai sử dụng. Chúng được gọi là *"số tiền đầu ra chưa được sử dụng"* (*Unspent Transaction Ouput - UTXO*). Thuật ngữ này rất khó dịch cho thoát, nên từ giờ ta sẽ gọi chúng đơn giản là UTXO. Chỉ các UTXO mới được sử dụng để làm đầu vào cho các giao dịch. Điều này rất dễ hiểu: *anh chỉ có thể sử dụng số tiền anh chưa sử dụng mà thôi*.
+Ở trên, ta biết rằng `TXID1` và `TXID2` đã được sử dụng, và chẳng ai cần đến chúng nữa trong quá trình xác minh giao dịch đầu vào. Tiếp tục với ví dụ của chúng ta: `TXID3` là mã giao dịch của Chris chuyển tiền cho Leon, trong đó `TXID1` và `TXID2` là 2 giao dịch đầu vào, cung cấp dòng tiền vào cho `TXID3`. Tại thời điểm `TXID3` được ghi nhận vào blockchain thì nó đang chứa 90 BTC. Số tiền này chưa được sử dụng. Nó được gọi là *"số tiền đầu ra chưa được sử dụng"* (*Unspent Transaction Ouput - UTXO*). Thuật ngữ này rất khó dịch cho thoát, nên từ giờ ta sẽ gọi chúng đơn giản là `UTXO`. Chỉ các `UTXO` mới được sử dụng để làm đầu vào cho các giao dịch. Điều này rất dễ hiểu: *anh chỉ có thể sử dụng số tiền anh chưa sử dụng mà thôi*.
 
-UTXO có vai trò vô cùng quan trọng trong thiết kế của Bitcoin. Mỗi node trong mạng lưới Bitcoin đều có một bảng theo dõi các UTXO này (được gọi là *tập hợp UTXO*, *UTXO set*) và cập nhật nó sau mỗi giao dịch. Thay vì phải rà soát trên blockchain để xác minh các giao dịch, các node chỉ cần rà soát trên UTXO set, sẽ nhanh hơn rất nhiều. Một phần vì kích thước dữ liệu của UTXO nhỏ hơn và đơn giản hơn block, một phần vì số lượng các UTXO có thể giảm đi sau một giao dịch. Đó là trường hợp số UTXO được sử dụng để cung cấp dòng tiền vào của một giao dịch lớn hơn số UTXO phát sinh sau giao dịch. Giả sử trong TXID3, Chris chỉ chuyển tiền cho Leon, mà không chuyển cho Jill, như thế sau khi giao dịch được thực hiện, 2 UTXO của TXID1 và TXID2 đã được tiêu thụ, và chỉ phát sinh 1 UTXO mới mà thôi. Do vậy, số lượng UTXO cần theo dõi trong UTXO set đã giảm đi 1. Trong khi với thời gian, kích thước blockchain chỉ có tăng chứ không giảm, thì kích thước UTXO set có thể dao động quanh một khoảng nhỏ hơn nhiều. Trong khi hiện nay tổng kích thước blockchain của Bitcoin đã lên tới hơn 350 Gigabyte, thì kích thước trung bình của UTXO set chỉ khoảng 3.5 Gigabyte, hoàn toàn đủ nhỏ để chứa hẳn trong bộ nhớ máy tính, qua đó tăng đáng kể tốc độ xác minh giao dịch của node.
+`UTXO` có vai trò vô cùng quan trọng trong thiết kế của Bitcoin. Mỗi node trong mạng lưới Bitcoin đều có một bảng theo dõi các `UTXO` này (được gọi là *tập hợp `UTXO`*, *UTXO set*) và cập nhật nó sau mỗi giao dịch. Thay vì phải rà soát trên blockchain để xác minh các giao dịch, các node chỉ cần rà soát trên *UTXO set*, sẽ nhanh hơn rất nhiều. Một phần vì kích thước dữ liệu của `UTXO` nhỏ hơn và đơn giản hơn block, một phần vì số lượng các `UTXO` có thể giảm đi sau một giao dịch. Đó là trường hợp số `UTXO` được sử dụng để cung cấp dòng tiền vào của một giao dịch lớn hơn số `UTXO` phát sinh sau giao dịch. *Bitcoin quy định mỗi giao dịch chỉ được chuyển tới một ví mà thôi*. Trong khi đó, mỗi giao dịch đều cần tối thiểu 1 giao dịch đầu vào để cung cấp tiền cho nó. Trong thực tế, số giao dịch đầu vào thường lớn hơn rất nhiều. Ngay trong ví dụ của chúng ta, để ra một `TXID3` ta đã cần 2 giao dịch đầu vào là `TXID1` và `TXID2`. Do vậy, số lượng `UTXO` cần theo dõi trong *UTXO set* đã giảm đi 1 sau khi `TXID3` được chấp nhận. Trong khi với thời gian, kích thước blockchain chỉ có tăng chứ không giảm, thì kích thước UTXO set có thể dao động quanh một khoảng nhỏ hơn nhiều. Trong khi hiện nay tổng kích thước blockchain của Bitcoin đã lên tới hơn 350 Gigabyte, thì kích thước trung bình của UTXO set chỉ khoảng 3.5 Gigabyte, hoàn toàn đủ nhỏ để chứa hẳn trong bộ nhớ máy tính, qua đó tăng đáng kể tốc độ xác minh giao dịch của node.
 
 ***Lưu ý:***
 
@@ -174,25 +201,23 @@ UTXO có vai trò vô cùng quan trọng trong thiết kế của Bitcoin. Mỗi
 
 ## Phần 12: Tiền thừa, phí giao dịch và coinbase
 
-Quay trở lại ví dụ giao dịch của Chris, ta để ý rằng 2 UTXO đầu vào cung cấp cho nó 100 BTC (50 từ Ada và 50 từ Artyom), nhưng đầu ra chỉ có 90 BTC mà thôi (50 cho Leon, 40 cho Jill). Vậy còn 10 BTC thừa ra (change) thì xử lý ra sao?
+Quay trở lại ví dụ giao dịch của Chris, ta để ý rằng 2 UTXO đầu vào cung cấp cho nó 100 BTC (50 từ Ada và 50 từ Artyom), nhưng đầu ra chỉ có 90 BTC (gửi cho Leon) mà thôi. Vậy còn 10 BTC thừa ra (change) thì xử lý ra sao?
 
-Bitcoin không tự động ghi nhận 10 BTC tiền thừa này lại cho Chris. Ta nhớ ở Phần 10 đã nói rằng Bitcoin không có khái niệm số dư. Mọi con số trên Bitcoin đều phải tính toán từ các giao dịch và các UTXO. Nếu vậy, Chris sẽ bị mất toi 10 BTC hay sao?
+Bitcoin không tự động ghi nhận 10 BTC tiền thừa này lại cho Chris. Ta nhớ ở Phần 10 đã nói rằng Bitcoin không có khái niệm số dư. Mọi con số trên Bitcoin đều phải tính toán từ các giao dịch và các `UTXO`. Nếu vậy, Chris sẽ bị mất toi 10 BTC hay sao?
 
-Dĩ nhiên Chris không muốn thế. Cho nên anh ta bổ sung thêm 1 nội dung nữa trong giao dịch của mình, đó là chuyển 10 BTC ngược trở lại cho mình. Như thế, sau khi thực hiện giao dịch TXID3, ta có 3 UTXO mới như sau:
+Dĩ nhiên Chris không muốn thế. Cho nên anh ta bổ sung thêm 1 nội dung nữa trong giao dịch của mình, đó là chuyển 10 BTC ngược trở lại cho mình. Như thế, sau khi thực hiện giao dịch `TXID3`, ta có 2 `UTXO` mới như sau:
 
-1. 50 BTC cho Leon.
-2. 40 BTC cho Jill.
-3. *10 BTC cho chính Chris.*
+1. 90 BTC cho Leon.
+2. *10 BTC cho chính Chris*.
 
 Việc chuyển lại tiền cho chính mình nghe rất khôi hài với hầu hết mọi người, nhưng nó rất có lý với Bitcoin. Bởi vì Bitcoin không phải đẻ thêm ra một cơ chế khác để quản lý số dư, mà lý do thì ta đã biết: số dư là một điểm rủi ro về an ninh, rất dễ bị tấn công khai thác.
 
 Trở lại với Chris. Trong lúc lập giao dịch, anh ta nghĩ rằng, có lẽ nên khuyến khích mọi người tham gia vào xử lý giao dịch của anh ta. Như thế mọi người sẽ nỗ lực hơn và vì thế giao dịch của anh ta sẽ được thực hiện nhanh hơn. Chris đang rất vội! Nhưng khích lệ mọi người bằng cách nào? Thôi thì để lại 1 BTC cho bất cứ ai đưa được giao dịch này vào blockchain. Vì thế, Chris điều chỉnh giao dịch chuyển tiền như sau:
 
-1. 50 BTC cho Leon.
-2. 40 BTC cho Jill.
-3. 9 BTC cho chính Chris.
+1. 90 BTC cho Leon.
+2. 9 BTC cho chính Chris.
 
-Như thế, còn thừa ra 1 BTC. Bitcoin có quy định rằng, nếu sau một giao dịch mà có một lượng tiền thừa, không thuộc vào một UTXO nào, thì nó sẽ chuyển số tiền thừa đó cho người nào có công đưa được giao dịch đó vào blockchain (tức là người tạo ra được block mới, trong đó chứa giao dịch này, và block đó được ghi nhận vào blockchain). Khoản tiền này được gọi là *phí giao dịch* (*transaction fee*).
+Như thế, còn thừa ra 1 BTC. Bitcoin có quy định rằng, nếu sau một giao dịch mà có một lượng tiền thừa, không thuộc vào một `UTXO` nào, thì nó sẽ chuyển số tiền thừa đó cho người nào có công đưa được giao dịch đó vào blockchain (tức là người tạo ra được block mới, trong đó chứa giao dịch này, và block đó được ghi nhận vào blockchain). Khoản tiền này được gọi là *phí giao dịch* (*transaction fee*).
 
 Khoản phí này được chuyển đến người có công tạo block thế nào? Bitcoin cho phép người tạo block đưa vào đầu danh sách của giao dịch của block một giao dịch đặc biệt, được gọi là *coinbase* transaction. Người được nhận tiền từ giao dịch coinbase chính là người tạo block, còn giá trị là tổng số tiền phí giao dịch từ tất cả các giao dịch trong block, cùng với 1 khoản thưởng đặc biệt, gọi là *block reward*. Ta sẽ bàn về block reward ở phần sau. Như vậy, nếu may mắn đến với Ada, và block của cô ấy được chấp nhận, thì Ada sẽ có thêm được một UTXO với số tiền ghi trong coinbase của block.
 
@@ -207,7 +232,7 @@ Khởi đầu của Bitcoin, trong mang lưới không có lấy một satoshi n
 - Với mỗi block mới được ghi vào blockchain, người tạo block đó được thưởng một lượng bitcoin mới (chưa có trên mạng lưới). Có thể hiểu lượng bitcoin "đào" được này như việc in thêm tiền. Phần thưởng này được gọi là "*block reward*".
 - Những người chạy các node (các máy tính) để tham gia vào việc tính toán, xác minh giao dịch, tạo lập các block, được gọi là các "*thợ mỏ*" hay "*thợ đào*" (*miner*).
 - Để kìm chế lạm phát, cứ mỗi 210.000 block, Bitcoin giảm số lượng block reward đi một nửa, goi là *halving*. Bitcoin được thiết kế để ra một block mới mỗi 10 phút. Như thế, sau khoảng mỗi 4 năm thì phần thưởng cho "thợ đào" lại giảm đi một nửa. Năm 2008, khi mới đi vào hoạt động, block reward là 50 BTC (Satoshi chính là người được hưởng phần thưởng 50 BTC đầu tiên khi tạo ra block zero, hay còn gọi là *genesis block*). Đến 2012, phần thưởng còn 25 BTC. Năm 2016, là 12,5 BTC. Và tại thời điểm viết bài này, năm 2021, phần thưởng này chỉ còn 6,25 BTC. Với quy định này, đến năm 2137, sẽ không còn phần thưởng nào cho thợ đào nữa, và số lượng BTC của Bitcoin dừng lại ở con số xấp xỉ 21 triệu BTC.
-- Xác suất để một thợ đào may mắn tạo được một block mới trên blockchain của Bitcoin để nhận block reward tỉ lệ theo phần trăm năng lực tính toán của node do anh ta vận hành so với tổng năng lực tính toán của toàn mạng lưới. Năng lực tính toán này được đo theo số lượng hash tính được trong một giây (xem [Phần 6](#proof-of-work)), và thường được ghi là Gh/s (Gigahash trên giây, 1 Gh = 1 tỷ hash). Hiện tại, tổng công suất tính toán của của mạng lưới Bitcoin là khoảng 122,77 M TH/s (122,77 tỷ Gh/s, hay là 122,77 x 10<sup>18</sup> H/s). Để hình dung, một máy tính để bàn sử dụng loại CPU phổ biến hiện nay là Intel Core i5 có công suất tính toán khoảng 800 H/s.
+- Xác suất để một thợ đào may mắn tạo được một block mới trên blockchain của Bitcoin để nhận block reward tỉ lệ theo phần trăm năng lực tính toán của node do anh ta vận hành so với tổng năng lực tính toán của toàn mạng lưới. Năng lực tính toán này được đo theo số lượng hash tính được trong một giây (xem [Phần 6](#proof-of-work)), và thường được ghi là Gh/s (Gigahash trên giây, 1 Gh = 1 tỷ hash). Hiện tại, tổng công suất tính toán của của mạng lưới Bitcoin là khoảng 122,77 M TH/s (122,77 tỷ Gh/s). Để hình dung, một máy tính để bàn sử dụng loại CPU phổ biến hiện nay là Intel Core i5 có công suất tính toán khoảng 800 H/s.
 - Vì khả năng để một thợ đào riêng lẻ đào được block reward là rất thấp, nên rất nhiều thợ đào đang cùng tham gia vào một hình thái hợp tác xã, gọi là mining pool, để cùng nha đào bitcoin. Khi một máy tính trong pool may mắn đào được một lượng bitcoin, một phần của phần thưởng đó sẽ được chia cho những người khác theo tỉ lệ đóng góp công suất tính toán chung của pool. Như thế, thu nhập của mỗi thợ đào sẽ ổn định hơn.
 
 ## Phần 14: Ví, chữ ký, và chùm chìa khóa
@@ -228,17 +253,17 @@ Trên một lệnh chuyển tiền ngân hàng (chỉ xét trường hợp trong
 
 Trong đó, quan trọng nhất là chữ ký của người gửi, tức chủ tài khoản. Nếu chữ ký không đúng với mẫu đã đăng ký cho tài khoản, lệnh chuyển tiền này sẽ bị từ chối xử lý ngay lập tức.
 
-Trở lại với ví dụ của chúng ta. Với Bitcoin, không có cái gì gọi là thông tin tài khoản, mẫu chữ ký. Vậy thì Chris ký xác nhận lệnh chuyển tiền, tức giao dịch TXID3, thế nào? Làm sao để những người khác xác minh lệnh này do chính Chris đưa ra?
+Trở lại với ví dụ của chúng ta. Với Bitcoin, không có cái gì gọi là thông tin tài khoản, mẫu chữ ký. Vậy thì Chris ký xác nhận lệnh chuyển tiền, tức giao dịch `TXID3`, thế nào? Làm sao để những người khác xác minh lệnh này do chính Chris đưa ra?
 
 Ở đây, ta cần chấp nhận tìm hiểu thêm một khái niệm mới có tính kỹ thuật một chút: đó là *"chìa khóa"* (*key*). Mà thực ra là 2 loại chìa: *chìa công khai* (*public key - PK*) và *chia riêng tư* (*secret/private key - SK*).
 
 ### Chữ ký
 
-Giới khoa học máy tính từ lâu đã phát minh ra một số thuật toán, được gọi là mã hóa khóa công khai (Public Key Cryptoghraphy - PKC). Đặc điểm của phương thức mã hóa này là *bất đối xứng* (*asymetric*). Điều đó có nghĩa là sao?
+Giới khoa học máy tính từ lâu đã phát minh ra một số thuật toán, được gọi là mã hóa khóa công khai (*Public Key Cryptoghraphy - PKC*). Đặc điểm của phương thức mã hóa này là *bất đối xứng* (*asymetric*). Điều đó có nghĩa là sao?
 
 Thông thường, khi cần mã hóa dữ liệu, ta sẽ sử dụng một cụm từ ngữ, khi kết hợp nó với thuật toán mã hóa, sẽ mã hóa dữ liệu đầu vào thành một khối dữ liệu đầu ra khác hẳn và vô nghĩa. Muốn giải mã khối dữ liệu đầu ra này, ta cần cụm từ ngữ kia, cho chạy qua thuật toán để giải mã ngược lại. Đây là phương thức mã hóa đối xứng (symetric). Để mã hóa hay giải mã, ta chỉ cần sử dụng cùng một cụm từ ngữ, đó chính là chìa khóa để mã hóa và giải mã.
 
-Với PKC thì khác hẳn. PKC sinh ra không phải một, mà là một cặp chìa khóa, bao gồm một khóa công khai (Public Key) và một khóa riêng tư (Secret Key - SK). Dữ liệu bị mã hóa bởi khóa riêng tư chỉ có thể được giải mã bởi khóa công khai tương ứng. Tại sao lại có cái gọi là công khai và riêng tư này? Hai cái tên đó xuất phát từ ý nghĩa sử dụng của mỗi loại khóa. Khóa công khai, là chìa mà ta công khai chia sẻ cho những người khác, còn khóa riêng tư, là chìa mà ta giữ bí mật cho riêng mình. Mục đích làm như vậy làm để làm gì? Ta xét ví dụ sau:
+Với PKC thì khác hẳn. PKC sinh ra không phải một, mà là một bộ chìa khóa, bao gồm một khóa riêng tư (*Secret Key - SK*), tương ứng với nhiều khóa công khai (*Public Key*). Dữ liệu bị mã hóa bởi khóa riêng tư chỉ có thể được giải mã bởi bất kỳ khóa công khai nào tương ứng với nó. Tại sao lại có cái gọi là công khai và riêng tư này? Hai cái tên đó xuất phát từ ý nghĩa sử dụng của mỗi loại khóa. Khóa công khai, là chìa mà ta công khai chia sẻ cho những người khác, còn khóa riêng tư, là chìa mà ta giữ bí mật cho riêng mình. Mục đích làm như vậy làm để làm gì? Ta xét ví dụ sau:
 
 Chris gửi cho Ada một bức thư. Vì trong quá trình chuyển phát, một kẻ trung gian nào đó, ví dụ chính tay bưu tá, có thể đọc trộm, và thậm chí thay đổi nội dung bức thư (giả mạo), cho nên Chris cần một phương thức nào đó để đảm bảo 2 mục tiêu:
 
@@ -251,34 +276,53 @@ Như vậy, với PKC, ta có được trong tay phương thức mã hóa vừa 
 
 Trở lại với bài toán xác minh lệnh chuyển tiền. Chris hoàn toàn có thể áp dụng cùng phương pháp với gửi thư. Anh ta có thể dùng SK để mã hóa nội dung chuyển tiền, và thông báo PK tương ứng cho tất cả mọi người, để mọi người có thể dùng PK đó để giải mã lệnh chuyển tiền, qua đó xác nhận lệnh này đúng là của Chris, và sau đó xác minh nội dung chuyển tiền là hợp lệ (ví dụ số dư hiện có của Chris đủ để chuyển tiền đi). Tuy nhiên, phương pháp này có một nhược điểm: nó làm lộ danh tính của Chris, vì mọi người biết PK này là của anh ta.
 
-Với Bitcoin, mọi người không cần quan tâm ai là người tạo giao dịch, ai là người nhận. Như thế mới đảm bảo tính ẩn danh của mạng lưới. Nhưng việc xác minh giao dịch hợp lệ vẫn phải được tiến hành. Vậy giải quyết vấn đề này ra sao? 
+Với Bitcoin, mọi người không cần quan tâm ai là người tạo giao dịch, ai là người nhận. Như thế mới đảm bảo tính ẩn danh của mạng lưới. Nhưng việc xác minh giao dịch hợp lệ vẫn phải được tiến hành. Vậy giải quyết vấn đề này ra sao?
 
-Satoshi đưa ra ý tưởng như sau: với mỗi giao dịch chuyển tiền đi, người lập giao dịch sẽ lấy nội dung giao dịch, chạy nó qua thuật toán hash, rồi sử dụng SK của mình để mã hóa chuỗi hash, và sinh ra một mẩu dữ liệu, được gọi là *chữ ký số* (*digital signature*) của giao dịch. Thao tác sử dụng SK để mã hóa vừa nói chính là thao tác ký nhận dữ liệu (signing). Người lập giao dịch sẽ đính kèm chữ ký này vào dữ liệu giao dịch, và gửi lên mạng lưới. Như vậy, dữ liệu của một giao dịch mới sẽ gồm:
+Satoshi đưa ra ý tưởng như sau: với mỗi giao dịch chuyển tiền đi, người lập giao dịch sẽ lấy nội dung giao dịch, chạy nó qua thuật toán hash, rồi sử dụng SK của mình để mã hóa chuỗi hash, và sinh ra một mẩu dữ liệu, được gọi là *chữ ký số* (*digital signature*) của giao dịch. Thao tác sử dụng SK để mã hóa vừa nói chính là thao tác ký nhận dữ liệu (*signing*). Người lập giao dịch sẽ đính kèm chữ ký này vào dữ liệu giao dịch, và gửi lên mạng lưới. Như vậy, dữ liệu của một giao dịch mới sẽ gồm:
 
-1. Danh sách giao dịch đầu vào (TXID1, TXID2).
-2. Địa chỉ người nhận và số tiền cần chuyển (50 BTC cho Leon, và 40 cho Jill).
+1. Danh sách giao dịch đầu vào (`TXID1` và `TXID2` từ Ada và Artyom chuyển cho Chris).
+2. Địa chỉ người nhận và số tiền cần chuyển (90 BTC cho Leon).
 3. Chữ ký số của Chris.
 
-Lưu ý là ở nội dung (2) trên đây, thay vì 2 cái tên Leon và Jill, thì Chris điền vào đó 2 PK, một là của Leon, và PK còn lại là của Jill. Vì sao anh ta lại biết PK của Leon và Jill? Là vì chính Leon và Jill đã cung cấp cho Chris. Trước khi chuyển tiền, Chris nhắn tin cho Leon và bảo *"Này Leon, anh sẽ chuyển cho chú 50 BTC, chú đưa anh cái địa chỉ ví của chú để anh vào lệnh"*, và Leon sẽ trả lời: *"OK Chris, anh chuyển vào ví có địa chỉ **1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2** nhé"*. Chuỗi ký tự rắc rối trong tin nhắn của Leon chính là địa chỉ ví của anh ta, và nó chính là PK của Leon. Tương tự, Jill sẽ chuyển cho Chris địa chỉ ví của mình, tức là PK của cô ấy. Như vậy, nội dung giao dịch của Chris chính xác là như sau:
+Lưu ý là ở nội dung (2) trên đây, thay vì cái tên Leon, thì Chris điền vào đó PK của Leon. Vì sao anh ta lại biết PK của Leon? Là vì chính Leon đã cung cấp cho Chris. Trước khi chuyển tiền, Chris nhắn tin cho Leon và bảo *"Này Leon, anh sẽ chuyển cho chú 50 BTC, chú đưa anh cái địa chỉ ví của chú để anh tạo giao dịch"*, và Leon sẽ trả lời: *"OK Chris, anh chuyển vào ví có địa chỉ `1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2` nhé"*. Chuỗi ký tự rắc rối trong tin nhắn của Leon chính là địa chỉ ví của anh ta, và nó chính là PK của Leon. Ngược lại, trong 2 giao dịch đầu vào là `TXID1` và `TXID2` sẽ chứa PK của Chris, vì Chris là người nhận tiền. Như vậy, nội dung giao dịch `TXID3` của Chris chính xác là như sau:
 
-1. Danh sách giao dịch đầu vào (TXID1, TXID2).
-2. Địa chỉ ví (PK) của người nhận và số tiền cần chuyển.
+1. Danh sách giao dịch đầu vào (`TXID1`, `TXID2`).
+2. Địa chỉ ví của người nhận (PK của Leon) và số tiền cần chuyển.
 3. Chữ ký số của Chris.
 
-Toàn bộ nội dung trên sẽ được đưa lên mạng lưới để mọi người cùng biết. Bây giờ, để xác minh giao dịch TXID3 của Chris mới đưa lên, mỗi người trên mạng, ví dụ là Ada, sẽ làm như sau (xem lại [Phần 10](#phần-10-giao-dịch-và-xác-minh-giao-dịch)):
+```txt
+Dữ liệu giao dịch:
++---------------------+
+| TXID1: 50 BTC + PK1 |
++---------------------+
+| TXID2: 50 BTC + PK2 |
++---------------------+
+| TXID3: 90 BTC + PK3 |
++---------------------+
+| Chữ ký số của Chris |
++---------------------+
+```
 
-1. Xem lại nội dung các giao dịch đầu vào TXID1 và TXID2. Trong 2 giao dịch này có địa chỉ ví người nhận, đều là PKx. Nên nhớ rằng, các địa chỉ ví này là những chuỗi chữ số vô nghĩa, và không ai biết chúng gắn với ai. Vì vậy, tạm ký hiệu nó là PKx. Ada sẽ tạm ghi nhớ PKx này.
-2. Lấy nội dung TXID3, bỏ ra phần chữ ký số của nó, cho chạy qua thuật toán hash, ra được chuỗi hash H1.
-3. Bây giờ dùng chìa khóa PKx để giải mã chữ ký số của TXID3 ra được chuỗi hash H2.
-4. So sánh H1 và H2. 
+Toàn bộ nội dung trên sẽ được đưa lên mạng lưới để mọi người cùng biết. Bây giờ, để xác minh giao dịch `TXID3` của Chris mới đưa lên, mỗi người trên mạng, ví dụ là Ada, sẽ làm như sau (xem lại [Phần 10](#phần-10-giao-dịch-và-xác-minh-giao-dịch)):
 
-Nếu H1 và H2 bằng nhau, nghĩa là giao dịch TXID3 hợp lệ. *Điểm thú vị ở đây là Ada hoàn toàn không biết TXID3 do ai tạo ra*, nhưng cô ấy biết rằng người đó đúng là người đã ký giao dịch TXID3, và người này đúng là người được nhận tiền từ các giao dịch đầu vào TXID1 và TXID2. Như thế là đủ để Ada đồng ý rằng TXID3 là hợp lệ và sẽ đưa nó vào trong block mà cô ấy đang tạo lập.
+1. Xem lại nội dung các giao dịch đầu vào `TXID1` và `TXID2`. Trong 2 giao dịch này có 2 địa chỉ ví người nhận (mà ta ngầm hiểu đều là các PK của Chris). Nên nhớ rằng, các địa chỉ ví này là những chuỗi chữ số vô nghĩa, và không ai biết chúng gắn với ai. Vì vậy, tạm ký hiệu chúng là `PK1` và `PK2`. Ada sẽ tạm ghi nhớ các PK này.
+2. Dùng chìa khóa `PK1` để giải mã chữ ký số của `TXID3` ra được chuỗi hash `H1`.
+3. Dùng chìa khóa `PK2` để giải mã chữ ký số của `TXID3` ra được chuỗi hash `H2`.
+4. Lấy nội dung `TXID3`, bỏ đi phần chữ ký số của nó, cho chạy qua thuật toán hash, ra được chuỗi hash `H3`.
+5. So sánh `H1`, `H2` với `H3`. Nếu chúng bằng nhau, nghĩa là người ký `TXID3` đúng là người thụ hưởng các giao dịch đầu vào, tiếp đó kiểm tra số tổng tiền đầu vào trên `TXID1` và `TXID2` xem có đủ để thực hiện `TXID3` hay không. Nếu chúng khác nhau, thì giao dịch `TXID3` chắc chắn không hợp lệ, và Ada chẳng cần phải kiểm tra số tiền trên các giao dịch đầu vào làm gì.
 
-Bây giờ, thử đánh giá lại phương pháp xác minh trên bằng cách giả định rằng Bill muốn giả mạo một giao dịch để chuyển tiền từ ví của Chris sang cho Bob, là tên em họ của hắn. Bill làm thế nào? Hắn sẽ tìm trên blockchain 2 giao dịch TXID1 và TXID2, không có gì khó, vì mọi thông tin trên blockchain là công khai. Sau đó hắn đưa địa chỉ nhận là ví của Bob vào thông tin giao dịch, rồi cuối cùng là ký nhận giao dịch rồi gửi lên mạng lưới. *Vấn đề là Bill không có SK của Chris, hắn phải sử dụng SK của chính hắn*.
+*Lưu ý rằng tất cả các thao tác trên đây đều dùng chung một thuận toán hash.*
 
-Khi Ada nhận được giao dịch giả mạo này, cô ấy sẽ làm các bước như vừa trình bày ở trên. Nhưng cô sẽ thấy lỗi ngay ở bước 3, vì PK lấy ra từ các giao dịch TXID1 và TXID2 là của Chris, nên nó không thể giải mã được chữ ký số của TXID3 (do Bill tạo ra). Vì thế Ada biết rằng giao dịch này là giả mạo, và sẽ thông báo cho mọi người cùng biết.
+Cần làm rõ ở bước (5) trên đây, vì sao nói nếu `H1`, `H2` và `H3` giống nhau, nghĩa là giao dịch `TXID3` hợp lệ về mặt người hưởng thụ của các giao dịch đầu vào? Giải nghĩa kết luận này như sau:
 
-Thế nếu Bill dùng các giao dịch đầu vào có PK là địa chỉ ví của hắn thì sao? OK thôi, vì như thế có nghĩa là hắn đang tạo một giao dịch sử dụng tiền của chính hắn, tức là hết sức bình thường.
+1. `H1` giống `H3` nghĩa là `PK1` khớp với SK đã dùng để ký `TXID3`. Điều này đồng nghĩa với việc người ký `TXID3` thực sự là người được nhận tiền từ `TXID1`.
+2. `H2` giống `H3` nghĩa là `PK2` khớp với SK đã dùng để ký `TXID3`. Điều này đồng nghĩa với việc người ký `TXID3` thực sự là người được nhận tiền từ `TXID2`.
+
+*Điểm thú vị ở đây là Ada hoàn toàn không biết `TXID3` do ai tạo ra*, nhưng cô ấy biết rằng người đó đúng là người đã ký giao dịch `TXID3`, và người này đúng là người được nhận tiền từ các giao dịch đầu vào `TXID1` và `TXID2`. Như thế là đủ để Ada đồng ý rằng `TXID3` là hợp lệ và sẽ đưa nó vào trong block mà cô ấy đang tạo lập.
+
+Bây giờ, thử đánh giá lại phương pháp xác minh trên bằng cách giả định rằng Bill muốn giả mạo một giao dịch để chuyển tiền từ ví của Chris sang cho Bob, là tên em họ của hắn. Bill làm thế nào? Hắn sẽ tìm trên blockchain 2 giao dịch `TXID1` và `TXID2`, không có gì khó, vì mọi thông tin trên blockchain là công khai. Sau đó hắn đưa địa chỉ nhận là ví của Bob vào thông tin giao dịch, rồi cuối cùng là ký nhận giao dịch rồi gửi lên mạng lưới. *Vấn đề là Bill không có SK của Chris, hắn phải sử dụng SK của chính hắn*.
+
+Khi Ada nhận được giao dịch này, cô ấy sẽ làm các bước như vừa trình bày ở trên. Nhưng cô sẽ thấy lỗi ở bước 5, vì PK lấy ra từ các giao dịch `TXID1` và `TXID2` là của Chris, nên khi giải mã chữ ký số (do Bill ký) sẽ ra các kết quả `H1` và `H2` không khớp với chuỗi hash `H3`. Vì thế Ada biết rằng giao dịch này là giả mạo.
 
 Như vậy, thay vì sử dụng thông tin định danh, trên mạng lưới Bitcoin, người ta sử dụng PK và SK, trong đó:
 
@@ -287,14 +331,14 @@ Như vậy, thay vì sử dụng thông tin định danh, trên mạng lưới B
 
 Với người sở hữu ví Bitcoin, và không quan tâm đến chi tiết phía sau hệ thống tạo lập và xác minh giao dịch, thì anh ta chỉ cần biết như sau:
 
-- *PK được dùng để nhận tiền*, vì thế, anh ta có thể đưa nó cho bất cứ ai cần chuyển tiền cho anh ta.
-- *SK được dùng để tiêu tiền*. Và vi thế, anh ta phải **giữ bí mật** cho riêng mình.
+- **PK được dùng để nhận tiền**, vì thế, anh ta có thể đưa chúng cho bất cứ ai cần chuyển tiền cho anh ta.
+- **SK được dùng để tiêu tiền**. Và vi thế, anh ta phải **giữ bí mật** cho riêng mình.
 
 ### Chùm chìa khóa và bản chất của ví điện tử
 
 Chris là một anh chàng cẩn thận, và không muốn những kẻ tọc mạch lần ra địa chỉ ví nào đó là của anh ta, trừ người cần chuyển tiền cho anh ta.
 
-Vì vậy, Chris nghĩ ra một cách: cứ mỗi lần một người mới nào đó muốn chuyển tiền cho anh ta, thì anh ta sinh ra một cặp chìa SK - PK, và anh ta chuyển PK mới này cho người đó. Như thế trên blockchain có thể có hàng chục giao dịch chuyển tiền, mỗi trong số chúng lại có địa chỉ ví nhận khác nhau, nhưng thực chất đều là của Chris. Và vì thế, Chris có trong tay cả một chùm chìa khóa.
+Vì vậy, Chris nghĩ ra một cách: cứ mỗi lần một người mới nào đó muốn chuyển tiền cho anh ta, thì anh ta sinh ra một cặp chìa SK-PK, và anh ta chuyển PK mới này cho người đó. Như thế trên blockchain có thể có hàng chục giao dịch chuyển tiền, mỗi trong số chúng lại có địa chỉ ví nhận khác nhau, nhưng thực chất đều là của Chris. Và vì thế, Chris có trong tay cả một chùm chìa khóa.
 
 Nhưng việc quản lý cả chùm chìa khóa như thế thật vất vả. Mỗi cặp chìa lại tương ứng với một khoản tiền riêng biệt (ta nhớ rằng để tiêu tiền gửi đến một PK thì ta cần có SK tương ứng). Riêng việc rà soát để tính tổng số tiền hiện có cũng khiến Chris đau đầu.
 
@@ -320,11 +364,11 @@ Do vậy, khi ta sử dụng ví Bitcoin (hoặc các loại ví tiền số kh�
 
 Ở [Phần 8](#longest-chain), ta đã làm quen với hiện tượng phân nhánh của blockchain, khi một gần như đồng thời có hơn 1 node tìm ra block mới, và gửi các block mới này đến các node còn lại. Trở lại với ví dụ ở Phần 8 (trích dẫn):
 
-> Ví dụ, blockchain hiện là A-B-C-D-E, và trong khi đang tìm nonce cho block mới là F, thì Chris gần như đồng thời nhận được từ Leon và Jill 2 block mới hợp lệ (có nonce khác nhau, nhưng hash tổng vẫn thỏa mãn độ khó) gọi là F1 và F2. Chris sẽ dừng việc tìm F, chấp nhận sử dụng block F1 của Leon như block mới (dù nó chỉ đến trước Jill vài phần trăm giây), và lưu block F2 của Jill lại để dự phòng. Như vậy, trong tay Chris đang có 2 chain sau: "A-B-C-D-E-F1" (chain chính) và "A-B-C-D-E-F2" (chain dự phòng). Gộp lại ta có hình ảnh của một cành cây 2 nhánh, chia tách từ sau block E. Sau đó Chris tiếp tục tìm kiếm block mới (G) trên nhánh Leon. 
+> Ví dụ, blockchain hiện là A-B-C-D-E, và trong khi đang tìm nonce cho block mới là F, thì Chris gần như đồng thời nhận được từ Leon và Jill 2 block mới hợp lệ (có nonce khác nhau, nhưng hash tổng vẫn thỏa mãn độ khó) gọi là F1 và F2. Chris sẽ dừng việc tìm F, chấp nhận sử dụng block F1 của Leon như block mới (dù nó chỉ đến trước Jill vài phần trăm giây), và lưu block F2 của Jill lại để dự phòng. Như vậy, trong tay Chris đang có 2 chain sau: "A-B-C-D-E-F1" (chain chính) và "A-B-C-D-E-F2" (chain dự phòng). Gộp lại ta có hình ảnh của một cành cây 2 nhánh, chia tách từ sau block E. Sau đó Chris tiếp tục tìm kiếm block mới (G) trên nhánh Leon.
 
 Minh họa cho blockchain sau tình huống trên như sau:
 
-```
+```txt
           F1
          /
 A-B-C-D-E
@@ -341,7 +385,8 @@ Tiếp theo, vẫn trích ví dụ ở Phần 8:
 > Sau một thời gian, Ada là người đầu tiên tìm được block G. Cô ta gửi nó đến toàn bộ mạng lưới. Vì trong một khoảng thời gian đủ dài, chưa có ai tìm được block G ngoài Ada, nên tất cả đều chấp nhận block G do Ada tìm ra. Và vì Ada tìm ra block G trên nhánh Jill, nên giờ đây nhánh của Jill (A-B-C-D-E-F2-G) dài hơn so với nhánh của Leon (A-B-C-D-E-F1). Do đó, Chris buộc phải chuyển từ nhánh anh ta đang làm việc (nhánh Leon) sang nhánh của Jill. Cũng may, là Chris vẫn còn lưu giữ block F2 của Jill làm dự phòng, nên giờ đây anh ta có thể chuyển sang nhánh Jill một cách dễ dàng, và sau đó chỉ việc bổ sung thêm block G của Ada là xong.
 
 Tại thời điểm này, blockchain có hình ảnh như sau:
-```
+
+```txt
           F1
          /
 A-B-C-D-E
@@ -351,7 +396,7 @@ A-B-C-D-E
 
 Như vậy là *chuỗi chính* (*main chain*, tức là *longest chain*) blockchain tiếp tục đi theo nhánh A-B-C-D-E-F2-G. Block F1 lúc này không được sử dụng, vì không nằm trên chuỗi chính, và gọi là uncle block.
 
-Việc hình thành các nhánh như trên diễn ra khá thường xuyên trong quá trình phát triển blockchain, vì đó là điều hết sức bình thường. Thực tế thì quá trình xử lý vấn đề hình thành nhánh và lựa chọn nhánh nào nằm trên chuỗi chính diễn ra rất nhanh, chỉ sau 1 block mà thôi. 
+Việc hình thành các nhánh như trên diễn ra khá thường xuyên trong quá trình phát triển blockchain, vì đó là điều hết sức bình thường. Thực tế thì quá trình xử lý vấn đề hình thành nhánh và lựa chọn nhánh nào nằm trên chuỗi chính diễn ra rất nhanh, chỉ sau 1 block mà thôi.
 
 Tuy nhiên, có những trường hợp việc rẽ nhánh này diễn ra lâu hơn (số lượng block trên nhánh nhiều hơn một vài block), thậm chí là vĩnh viễn không hợp nhất lại được. Người ta gọi chúng là các *fork*.
 
@@ -384,9 +429,9 @@ Hay nói một cách dễ hiểu hơn, một HĐTM là một *chương trình m�
 
 Nick Szabo không chỉ đưa ra những đề xuất về hợp đồng thông minh, mà còn là người rất tích cực nghiên cứu và đưa ra các thiết kế về tiền mã hóa, về nền kinh tế phi tập trung. Thực tế, lĩnh vực mà ông nổi tiếng nhất là mã hóa, và vì nhiều điểm trùng hợp, rất nhiều người đã cho rằng ông chính là người đứng sau cha đẻ ẩn danh của Bitcoin: Satoshi Nakamoto. Tuy nhiên Nick Szabo đã liên tục phản đối điều này.
 
-Quay trở lại với khái niệm về HĐTM. Khi Nick Szabo đưa ra nó và tìm cách hiện thực hóa nó, thì thiết kế khá thi của blockchain vẫn chưa tồn tại, nên ông ấy vẫn chưa thành công trong việc ứng dụng khái niệm này vào thực tế. Vì sao lại như vậy?
+Quay trở lại với khái niệm về HĐTM. Khi Nick Szabo đưa ra nó và tìm cách hiện thực hóa nó, thì thiết kế khả thi của blockchain vẫn chưa tồn tại, nên ông ấy vẫn chưa thành công trong việc ứng dụng khái niệm này vào thực tế. Vì sao lại như vậy?
 
-Theo Nick Szabo, nền tảng cơ sở cần có để HĐTM tồn tại, là mạng lưới bất tín (trustless network), trong đó, tất cả các bên tham gia đều không ai tin tưởng ai, nhưng vẫn cần cùng nhau đi đến thống nhất để thực hiện một HĐTM và công nhận kết quả mà nó tạo ra. Bởi vì theo ông ta, bất cứ niềm tin nào cũng là cơ sở của rủi ro, khi niềm tin đó bị xâm phạm, dù là vô tình hay hữu ý, thì toàn bộ ý nghĩa của một bản hợp đồng, vốn yêu cầu tính chặt chẽ và minh bạch, sẽ bị hủy hoại.
+Theo Nick Szabo, nền tảng cơ sở cần có để HĐTM tồn tại, là mạng lưới bất tín (trustless network), trong đó, tất cả các bên tham gia đều không ai tin tưởng ai, nhưng vẫn cần cùng nhau đi đến thống nhất để thực hiện một HĐTM và công nhận kết quả mà nó tạo ra. Bởi vì theo ông, bất cứ niềm tin nào cũng là cơ sở của rủi ro, khi niềm tin đó bị xâm phạm, dù là vô tình hay hữu ý, thì toàn bộ ý nghĩa của một bản hợp đồng, vốn yêu cầu tính chặt chẽ và minh bạch, sẽ bị hủy hoại.
 
 Nghe không logic tí nào, phải không? Nếu không ai tin ai, thì làm thế nào lại đi đến đồng thuận được?
 
@@ -398,7 +443,7 @@ Ngay sau khi Bitcoin ra đời, rất nhiều người đã nhận ra ngay rằn
 - Nếu ta mở rộng dữ liệu của một giao dịch, cho phép đưa vào đó các mã lệnh phức tạp hơn, cho phép chúng chỉ thị mạng lưới blockchain thực hiện các nhiệm vụ cao cấp hơn, thì chẳng phải là chúng ta đã có trong tay một công cụ số hóa các HĐTM hay sao?
 - Ta thấy rằng, HĐTM đòi hỏi một mạng lưới bất tín nhằm đạt được tính minh bạch và khách quan tối đa. Thì đây, một blockchain như Bitcoin đáp ứng hoàn toàn đầy đủ những yêu cầu đó (xem lại các Phần từ 5 đến 11). Mã thực thi của các HĐTM được đưa lên blockchain theo cùng cơ chế xác minh như với các giao dịch, và thừa hưởng những đặc trưng quan trọng của chúng:
   - Minh bạch và công khai: ai cũng có thể xem toàn bộ thông tin và mã của HĐTM, ai cũng có thể sử dụng chúng.
-  - Toàn vẹn: một HĐTM sau khi đã đưa vào blockchain thì không thể bị kẻ xấu nào đó sửa đổi. 
+  - Toàn vẹn: một HĐTM sau khi đã đưa vào blockchain thì không thể bị kẻ xấu nào đó sửa đổi.
   - Công bằng: một HĐTM, để được đưa vào blockchain, phải được số đông trong mạng lưới blockchain chấp nhận.
 
 Như vậy, sự ra đời của Bitcoin đã tạo điều kiện để người ta nhìn thấy khả năng ứng dụng HĐTM vào trong blockchain. Tuy nhiên, Bitcoin lại không phải là một nền tảng phù hợp để HĐTM phát triển, mà phải đợt đến khi Ethereum, một nền tảng blockchain khác ra đời, thì các ứng dụng HĐTM mới bùng nổ. Vì sao lại như vậy?
@@ -414,6 +459,3 @@ Vì vậy, các phần tiếp theo của cuốn sách này, sẽ dựa chủ y�
 1. [Bitcoin Project](https://bitcoin.org)
 2. [Bitcoin Whitepaper](https://bitcoin.org/bitcoin.pdf)
 3. [Ethereum Organization](https://ethereum.org)
-
-
-
