@@ -72,7 +72,7 @@ Satoshi đã giải quyết khó khăn này bằng cách đưa ra cơ chế *Ch�
 
 ## Phần 6: Proof-of-Work
 
-Như đã nói cuối phần trước, có 2 khả năng Bill sẽ can thiệp cuộc bầu chọn blockchain, một là nhanh chóng tạo ra vô số các blockchain nhằm làm nhiễu loạn quá trình bầu chọn, hai là rủ anh em nhà hắn tới tham gia bầu chọn hòng chiếm đa số. Thậm chí hắn có thể sử dụng cùng lúc cả 2 cách.
+Như đã nói cuối phần trước, có hai khả năng Bill sẽ can thiệp cuộc bầu chọn blockchain, một là nhanh chóng tạo ra vô số các blockchain nhằm làm nhiễu loạn quá trình bầu chọn, hai là rủ anh em nhà hắn tới tham gia bầu chọn hòng chiếm đa số. Thậm chí hắn có thể sử dụng cùng lúc cả hai cách.
 
 Nhưng nếu ta yêu cầu rằng, mỗi người, để tạo ra một block mới, phải vác đủ 100 viên gạch đến quảng trường trung tâm để sung vào quỹ xây dựng nhà tình nghĩa, thì sao? Để sửa block C, Bill phải vác tới 100 viên, rồi block D, block E nữa, để tạo ra blockchain "đểu" đầu tiên, Bill đã phải vác đến quảng trường tới 300 viên gạch. Chưa kể, hắn không thể cùng lúc vác đến 300 viên. Khỏe mấy, hắn cũng chỉ có thể vác được 50 viên mỗi lần, và phải đi mất đến 1 tiếng đồng hồ từ lò gạch đến quảng trưởng. Để hoàn thành blockchain đểu đầu tiên, tổng cộng hắn mất 300 viên gạch cùng với 6 tiếng đồng hồ. Như vậy đủ khiến Bill phát hoảng khi nghĩ đến việc tiếp tục tạo ra thêm những blockchain đểu khác để làm rối cuộc bình bầu.
 
@@ -131,8 +131,8 @@ Ada:
   Nhánh chính:    A-B-C-D-E-F2(Jill)-G------+
   Nhánh dự phòng:          \F1(Leon) bị hủy |
 Chris:                                      |
-  Nhánh chính:    A-B-C-D-E-F1(Leon)-G<-----+
-  Nhánh dự phòng:          \F2(Jill) bị hủy
+  Nhánh chính:    A-B-C-D-E-F1(Leon) bị hủy |
+  Nhánh dự phòng:          \F2(Jill)-G<-----+ 
 ```
 
 Đến đây, ta đã đi qua những phần cơ bản nhất của blockchain. Ở phần tiếp theo, ta sẽ bàn thêm về ý nghĩa các giải pháp mà Satoshi đem lại cho Bitcoin.
