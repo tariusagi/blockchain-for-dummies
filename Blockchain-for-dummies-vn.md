@@ -18,7 +18,7 @@ Một *blockchain* là một chuỗi (*chain*) kết nối các khối (*block*)
 
 Vậy chuỗi hash là gì? Người ta nghĩ ra một thuật toán, gọi là *thuật toán băm* (*hash algorithm*), mà khi đưa vào đó một khối dữ liệu bất kỳ, sẽ cho ra kết quả là một chuỗi ký tự có độ dài cố định, ngắn hơn rất nhiều so với khối dữ liệu đầu vào, được gọi là *hash digest*, hay đơn giản là *hash*. Và quan trọng nhất, đó là chỉ cần một thay đổi nhỏ nhất ở dữ liệu đầu vào, thì hash đầu ra sẽ thay đổi hoàn toàn. Không thể có 2 khối dữ liệu đầu vào khác nhau, dù chỉ 1 bit, mà lại sinh ra 2 hash giống nhau. Vì thế, hash có vai trò như một chữ ký đại diện cho dữ liệu đầu vào.
 
-Để cho vui, bạn đọc có thể vào trang [SHA256 trên GitHub](https://emn178.github.io/online-tools/sha256.html) để trải nghiệm thuật toán băm SHA256 này.
+Để cho vui, bạn đọc có thể vào trang [SHA256 trên GitHub](https://emn178.github.io/online-tools/sha256.html) để trải nghiệm thuật toán băm SHA256, thuật toán được Bitcoin sử dụng. Tuy nhiên, nó chỉ là một trong số rất nhiều thuận toán băm hiện có.
 
 Phần tiếp theo sẽ giải thích vì sao blockchain yêu cầu mỗi block phải chứa hash của block trước nó.
 
